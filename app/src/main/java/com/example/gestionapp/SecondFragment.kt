@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
 import com.example.gestionapp.databinding.FragmentSecondBinding
@@ -52,6 +53,15 @@ class SecondFragment : Fragment() {
             val horaE = binding.edTxHoraEnd.text.toString()
             val notas = binding.edTxObservations.text.toString()
             val current = Evento(selectedEnum(tipo), fecha, horaI, horaE, notas)
+
+            (activity as MainActivity).eventos.add(current)
+            Toast.makeText(
+                (activity as MainActivity),
+                current.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+
+            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
         }
 
 

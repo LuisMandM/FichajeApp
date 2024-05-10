@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    var eventos: MutableList<Evento> = mutableListOf()
     //var lateinit eventos : List<Evento>
 
     override fun onCreate(savedInstanceState: Bundle?) {
