@@ -5,4 +5,5 @@ import java.util.Calendar
 
 class Evento(tipo:EnumEvent,fecha:Calendar,horaInit:String, horaEnd:String, notas:String) {
 
+
 }
