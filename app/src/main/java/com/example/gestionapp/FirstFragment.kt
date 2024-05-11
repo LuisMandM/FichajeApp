@@ -55,7 +55,7 @@ class FirstFragment : Fragment() {
             ).show()
             //loadEventsperDay()
             var currentEvents: MutableList<Evento> = mutableListOf()
-            for (evento in (activity as MainActivity).eventos) {
+            for (evento in (activity as MainActivity).viewModel.eventos) {
                 if (formatCalendar(evento.fecha) == formatCalendar(fecha)) {
                     currentEvents.add(evento)
                 }

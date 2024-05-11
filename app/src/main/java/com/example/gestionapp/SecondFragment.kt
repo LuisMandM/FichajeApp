@@ -52,17 +52,28 @@ class SecondFragment : Fragment() {
             val horaI = binding.edTxHoraInit.text.toString()
             val horaE = binding.edTxHoraEnd.text.toString()
             val notas = binding.edTxObservations.text.toString()
-            var eventFecha = fecha
-            val current = Evento(selectedEnum(tipo), eventFecha, horaI, horaE, notas)
+            val eventFecha = fecha
+            val current = (activity as MainActivity).viewModel.addRegister(
+                selectedEnum(tipo),
+                eventFecha,
+                horaI,
+                horaE,
+                notas
+            )
 
-            (activity as MainActivity).eventos.add(current)
-            Toast.makeText(
-                (activity as MainActivity),
-                current.toString(),
-                Toast.LENGTH_LONG
-            ).show()
+            if (current) {
+                Toast.makeText(
+                    (activity as MainActivity), "Registro Guardado Correctamente",
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+            }else{
+                Toast.makeText(
+                    (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
-            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
         }
 
 
@@ -87,7 +98,6 @@ class SecondFragment : Fragment() {
             EnumEvent.GUARDIA.toString() -> return EnumEvent.GUARDIA
             EnumEvent.REPORTE_HORARIO.toString() -> return EnumEvent.REPORTE_HORARIO
             else -> return EnumEvent.GENERAL
-
         }
     }
 
