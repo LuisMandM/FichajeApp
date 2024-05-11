@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.RecycleView.Adapter
 import com.example.gestionapp.databinding.FragmentFirstBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Locale
 
@@ -22,6 +23,7 @@ class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private lateinit var fecha: Calendar
+    private var eventos: MutableList<Evento> = mutableListOf()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -31,10 +33,9 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        fecha = Calendar.getInstance()
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,14 +53,40 @@ class FirstFragment : Fragment() {
                 "Fecha seleccionada: $selectedDateStr",
                 Toast.LENGTH_SHORT
             ).show()
+            //loadEventsperDay()
+            var currentEvents: MutableList<Evento> = mutableListOf()
+            for (evento in (activity as MainActivity).eventos) {
+                if (formatCalendar(evento.fecha) == formatCalendar(fecha)) {
+                    currentEvents.add(evento)
+                }
+            }
+            binding.eventRecycler.layoutManager = LinearLayoutManager(activity as MainActivity)
+            binding.eventRecycler.adapter = Adapter(currentEvents)
 
         }
 
         binding.btonNewEntry.setOnClickListener {
-           var date = fecha.timeInMillis
-            val bundle = bundleOf("fecha" to fecha)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,bundle)
+            var date = fecha.timeInMillis
+            val bundle = bundleOf("fecha" to date)
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
         }
+
+
+    }
+
+    private fun loadEventsperDay() {
+        val currentDate: Calendar = fecha
+        for (evento in (activity as MainActivity).eventos) {
+            if (evento.fecha == currentDate) {
+                eventos.add(evento)
+            }
+        }
+    }
+
+    private fun formatCalendar(dateRaw: Calendar): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val format = dateFormat.format(dateRaw.time)
+        return format
     }
 
     override fun onDestroyView() {

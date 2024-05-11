@@ -9,8 +9,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
 import com.example.gestionapp.databinding.ActivityMainBinding
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        eventos.add(Evento(EnumEvent.GUARDIA, Calendar.getInstance(),"15:30","16:00","Prueba"))
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

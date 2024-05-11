@@ -20,7 +20,7 @@ import java.util.Calendar
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
-    var fecha: Calendar = Calendar.getInstance()
+    private var fecha: Calendar = Calendar.getInstance()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -52,7 +52,8 @@ class SecondFragment : Fragment() {
             val horaI = binding.edTxHoraInit.text.toString()
             val horaE = binding.edTxHoraEnd.text.toString()
             val notas = binding.edTxObservations.text.toString()
-            val current = Evento(selectedEnum(tipo), fecha, horaI, horaE, notas)
+            var eventFecha = fecha
+            val current = Evento(selectedEnum(tipo), eventFecha, horaI, horaE, notas)
 
             (activity as MainActivity).eventos.add(current)
             Toast.makeText(
