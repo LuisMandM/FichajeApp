@@ -40,29 +40,12 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadEvents(Calendar.getInstance())
 
         binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             val calendar = Calendar.getInstance()
             calendar.set(year, month, dayOfMonth)
-
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val selectedDateStr = dateFormat.format(calendar.time)
-            fecha = calendar
-            Toast.makeText(
-                (activity as MainActivity),
-                "Fecha seleccionada: $selectedDateStr",
-                Toast.LENGTH_SHORT
-            ).show()
-            //loadEventsperDay()
-            var currentEvents: MutableList<Evento> = mutableListOf()
-            for (evento in (activity as MainActivity).viewModel.eventos) {
-                if (formatCalendar(evento.fecha) == formatCalendar(fecha)) {
-                    currentEvents.add(evento)
-                }
-            }
-            binding.eventRecycler.layoutManager = LinearLayoutManager(activity as MainActivity)
-            binding.eventRecycler.adapter = Adapter(currentEvents)
-
+            loadEvents(calendar)
         }
 
         binding.btonNewEntry.setOnClickListener {
@@ -74,14 +57,35 @@ class FirstFragment : Fragment() {
 
     }
 
-    private fun loadEventsperDay() {
+    private fun loadEvents(calendar:Calendar){
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val selectedDateStr = dateFormat.format(calendar.time)
+        fecha = calendar
+        /*Toast.makeText(
+            (activity as MainActivity),
+            "Fecha seleccionada: $selectedDateStr",
+            Toast.LENGTH_SHORT
+        ).show()*/
+        //loadEventsperDay()
+        var currentEvents: MutableList<Evento> = mutableListOf()
+        for (evento in (activity as MainActivity).viewModel.eventos) {
+            if (formatCalendar(evento.fecha) == formatCalendar(fecha)) {
+                currentEvents.add(evento)
+            }
+        }
+        binding.eventRecycler.layoutManager = LinearLayoutManager(activity as MainActivity)
+        binding.eventRecycler.adapter = Adapter(currentEvents)
+
+    }
+
+    /*private fun loadEventsperDay() {
         val currentDate: Calendar = fecha
         for (evento in (activity as MainActivity).eventos) {
             if (evento.fecha == currentDate) {
                 eventos.add(evento)
             }
         }
-    }
+    }*/
 
     private fun formatCalendar(dateRaw: Calendar): String {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

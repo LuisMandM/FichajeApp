@@ -21,6 +21,31 @@ class VM : ViewModel() {
                 "Prueba"
             )
         )
+
+        var calendar = Calendar.getInstance()
+        calendar.set(2024,5,10)
+        eventos.add(
+            Evento(
+                indexAsigment(),
+                EnumEvent.GENERAL,
+                Calendar.getInstance(),
+                "12:30",
+                "16:00",
+                "Prueba 2"
+            )
+        )
+
+        calendar.set(2024,5,16)
+        eventos.add(
+            Evento(
+                indexAsigment(),
+                EnumEvent.REPORTE_HORARIO,
+                Calendar.getInstance(),
+                "14:30",
+                "16:00",
+                "Prueba 3"
+            )
+        )
     }
 
     private fun indexAsigment(): Int {
