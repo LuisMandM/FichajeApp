@@ -33,9 +33,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/divider">
+        app:layout_constraintTop_toTopOf="@+id/divider"
+        android:padding="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/eventRecycler"
             android:layout_width="match_parent"
             android:layout_height="288dp" />
 
