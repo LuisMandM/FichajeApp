@@ -67,7 +67,7 @@ class FirstFragment : Fragment() {
 
         binding.btonNewEntry.setOnClickListener {
             var date = fecha.timeInMillis
-            val bundle = bundleOf("fecha" to date)
+            val bundle = bundleOf("fecha" to date, "id_evento" to -1)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
         }
 

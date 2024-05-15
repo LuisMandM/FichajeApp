@@ -13,7 +13,7 @@ class VM : ViewModel() {
     private fun draftDemo() {
         eventos.add(
             Evento(
-                1,
+                indexAsigment(),
                 EnumEvent.GUARDIA,
                 Calendar.getInstance(),
                 "15:30",
@@ -24,7 +24,7 @@ class VM : ViewModel() {
     }
 
     private fun indexAsigment(): Int {
-        return eventos.lastIndex + 1
+        return eventos.size + 1
     }
 
     fun addRegister(tipo: EnumEvent, fecha: Calendar, horaI: String, horaE: String, notas: String):
@@ -38,17 +38,27 @@ class VM : ViewModel() {
         }
     }
 
-    fun UpdateRegister(event: Evento): Boolean {
+    fun updateRegister(event: Evento): Boolean {
         try {
             val index = eventIndex(event.index)
-            return if (index != -1){
+            return if (index != -1) {
                 eventos[index] = event
                 true
-            }else false
+            } else false
 
         } catch (e: Exception) {
             return false
         }
+    }
+
+    fun deleteRegister(id: Int): Boolean {
+        return try {
+            eventos.removeAt(id-1)
+            true
+        } catch (e: Exception) {
+            false
+        }
+
     }
 
     fun searchID(id: Int): Evento? {

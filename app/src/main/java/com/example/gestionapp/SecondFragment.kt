@@ -69,7 +69,24 @@ class SecondFragment : Fragment() {
             else updateEvent()
         }
 
+        binding.btnDelete.setOnClickListener {
+            deleteEvent()
+        }
 
+
+    }
+
+    private fun deleteEvent() {
+        if ((activity as MainActivity).viewModel.deleteRegister(id_Evento)) {
+            Toast.makeText(
+                (activity as MainActivity), "Registro Eliminado Correctamente",
+                Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+        } else Toast.makeText(
+            (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun updateEvent() {
@@ -81,7 +98,7 @@ class SecondFragment : Fragment() {
             binding.edTxObservations.text.toString()
         )
 
-        if ((activity as MainActivity).viewModel.UpdateRegister(current)) {
+        if ((activity as MainActivity).viewModel.updateRegister(current)) {
             Toast.makeText(
                 (activity as MainActivity), "Registro Actualizado Correctamente",
                 Toast.LENGTH_SHORT
