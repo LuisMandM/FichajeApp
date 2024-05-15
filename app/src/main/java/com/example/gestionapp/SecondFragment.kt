@@ -21,6 +21,8 @@ class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private var fecha: Calendar = Calendar.getInstance()
+    private var id_Evento: Int = -1
+    private var creating: Boolean = true
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -46,37 +48,63 @@ class SecondFragment : Fragment() {
         ).show()
         fillSpinner()
 
-        binding.btnCR.setOnClickListener {
+        id_Evento = arguments?.getInt("id_evento") ?: -1
+        if (id_Evento != -1) {
+            creating = false
+            binding.btnDelete.isEnabled = true
+            val current = (activity as MainActivity).viewModel.searchID(id_Evento)
+            current?.let {
 
-            val tipo = binding.spinnerMotivo.selectedItem.toString()
-            val horaI = binding.edTxHoraInit.text.toString()
-            val horaE = binding.edTxHoraEnd.text.toString()
-            val notas = binding.edTxObservations.text.toString()
-            val eventFecha = fecha
-            val current = (activity as MainActivity).viewModel.addRegister(
-                selectedEnum(tipo),
-                eventFecha,
-                horaI,
-                horaE,
-                notas
-            )
-
-            if (current) {
-                Toast.makeText(
-                    (activity as MainActivity), "Registro Guardado Correctamente",
-                    Toast.LENGTH_SHORT
-                ).show()
-                findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
-            }else{
-                Toast.makeText(
-                    (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
-                    Toast.LENGTH_SHORT
-                ).show()
+                binding.spinnerMotivo.setSelection(
+                    (activity as MainActivity).viewModel.indexEnum(current.tipo)
+                )
+                binding.edTxHoraInit.setText(current.horaInit)
+                binding.edTxHoraEnd.setText(current.horaEnd)
+                binding.edTxObservations.setText(current.notas)
             }
-
+        } else {
+            binding.btnDelete.isEnabled = false
         }
 
 
+        binding.btnCR.setOnClickListener {
+            if (creating) SaveEvent()
+            else UpdateEvent()
+        }
+
+
+    }
+
+    private fun UpdateEvent() {
+
+    }
+
+    private fun SaveEvent() {
+        val tipo = binding.spinnerMotivo.selectedItem.toString()
+        val horaI = binding.edTxHoraInit.text.toString()
+        val horaE = binding.edTxHoraEnd.text.toString()
+        val notas = binding.edTxObservations.text.toString()
+        val eventFecha = fecha
+        val current = (activity as MainActivity).viewModel.addRegister(
+            selectedEnum(tipo),
+            eventFecha,
+            horaI,
+            horaE,
+            notas
+        )
+
+        if (current) {
+            Toast.makeText(
+                (activity as MainActivity), "Registro Guardado Correctamente",
+                Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+        } else {
+            Toast.makeText(
+                (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun fillSpinner() {

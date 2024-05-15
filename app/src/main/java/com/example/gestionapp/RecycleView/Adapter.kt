@@ -18,7 +18,7 @@ class Adapter(val lista: MutableList<Evento>) : RecyclerView.Adapter<Adapter.Vie
 
         init {
             binding.ltPrincipal.setOnClickListener {
-                val bundle = bundleOf("id" to id)
+                val bundle = bundleOf("id_evento" to id)
                 binding.ltPrincipal.findNavController()
                     .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
             }

@@ -38,6 +38,10 @@ class VM : ViewModel() {
         }
     }
 
+    fun UpdateRegister(event: Evento){
+
+    }
+
     fun searchID(id: Int): Evento? {
         var found: Evento? = null
         for (evento in eventos) {
@@ -47,5 +51,13 @@ class VM : ViewModel() {
             }
         }
         return found;
+    }
+
+    fun indexEnum(tipo: EnumEvent): Int {
+        return when (tipo) {
+            EnumEvent.GENERAL -> 0
+            EnumEvent.GUARDIA -> 1
+            EnumEvent.REPORTE_HORARIO -> 2
+        }
     }
 }
