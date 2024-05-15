@@ -10,7 +10,7 @@ class VM : ViewModel() {
         draftDemo()
     }
 
-    fun draftDemo() {
+    private fun draftDemo() {
         eventos.add(
             Evento(
                 1,
@@ -23,7 +23,7 @@ class VM : ViewModel() {
         )
     }
 
-    fun indexAsigment(): Int {
+    private fun indexAsigment(): Int {
         return eventos.lastIndex + 1
     }
 
@@ -36,5 +36,16 @@ class VM : ViewModel() {
         } catch (e: Exception) {
             return false
         }
+    }
+
+    fun searchID(id: Int): Evento? {
+        var found: Evento? = null
+        for (evento in eventos) {
+            if (evento.index == id) {
+                found = evento
+                break
+            }
+        }
+        return found;
     }
 }
