@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
 import com.example.gestionapp.databinding.FragmentSecondBinding
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -41,11 +43,6 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fechaEvent()
-        Toast.makeText(
-            (activity as MainActivity),
-            "Fecha seleccionada: $fecha",
-            Toast.LENGTH_SHORT
-        ).show()
         fillSpinner()
 
         id_Evento = arguments?.getInt("id_evento") ?: -1
@@ -69,13 +66,31 @@ class SecondFragment : Fragment() {
 
         binding.btnCR.setOnClickListener {
             if (creating) SaveEvent()
-            else UpdateEvent()
+            else updateEvent()
         }
 
 
     }
 
-    private fun UpdateEvent() {
+    private fun updateEvent() {
+        val current = Evento(
+            id_Evento,
+            selectedEnum(binding.spinnerMotivo.selectedItem.toString()), fecha,
+            binding.edTxHoraInit.text.toString(),
+            binding.edTxHoraEnd.text.toString(),
+            binding.edTxObservations.text.toString()
+        )
+
+        if ((activity as MainActivity).viewModel.UpdateRegister(current)) {
+            Toast.makeText(
+                (activity as MainActivity), "Registro Actualizado Correctamente",
+                Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+        } else Toast.makeText(
+            (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+            Toast.LENGTH_SHORT
+        ).show()
 
     }
 
@@ -114,10 +129,17 @@ class SecondFragment : Fragment() {
     }
 
     private fun fechaEvent() {
-        var date = arguments?.getLong("fecha") ?: Calendar.getInstance().timeInMillis
-        var convert = Calendar.getInstance();
+        val date = arguments?.getLong("fecha") ?: Calendar.getInstance().timeInMillis
+        val convert = Calendar.getInstance();
         convert.timeInMillis = date
-        fecha = convert;
+        fecha = convert
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val selectedDateStr = dateFormat.format(fecha.time)
+        Toast.makeText(
+            (activity as MainActivity),
+            "Fecha seleccionada: $selectedDateStr.",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun selectedEnum(enumString: String): EnumEvent {
@@ -132,5 +154,6 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 }

@@ -38,8 +38,17 @@ class VM : ViewModel() {
         }
     }
 
-    fun UpdateRegister(event: Evento){
+    fun UpdateRegister(event: Evento): Boolean {
+        try {
+            val index = eventIndex(event.index)
+            return if (index != -1){
+                eventos[index] = event
+                true
+            }else false
 
+        } catch (e: Exception) {
+            return false
+        }
     }
 
     fun searchID(id: Int): Evento? {
@@ -59,5 +68,16 @@ class VM : ViewModel() {
             EnumEvent.GUARDIA -> 1
             EnumEvent.REPORTE_HORARIO -> 2
         }
+    }
+
+    private fun eventIndex(id: Int): Int {
+        var index = -1
+        for (i in 0..eventos.size - 1) {
+            if (eventos[i].index == id) {
+                index = i
+                break
+            }
+        }
+        return index
     }
 }

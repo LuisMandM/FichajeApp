@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gestionapp.Model.Evento
 import com.example.gestionapp.R
 import com.example.gestionapp.databinding.CardEventRecyclerviewBinding
+import java.util.Calendar
 
 
 class Adapter(val lista: MutableList<Evento>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
@@ -15,10 +16,11 @@ class Adapter(val lista: MutableList<Evento>) : RecyclerView.Adapter<Adapter.Vie
     inner class ViewHolder(val binding: CardEventRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var id: Int = -1
+        var fecha : Calendar = Calendar.getInstance()
 
         init {
             binding.ltPrincipal.setOnClickListener {
-                val bundle = bundleOf("id_evento" to id)
+                val bundle = bundleOf("id_evento" to id,"fecha" to fecha.timeInMillis)
                 binding.ltPrincipal.findNavController()
                     .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
             }
@@ -38,6 +40,7 @@ class Adapter(val lista: MutableList<Evento>) : RecyclerView.Adapter<Adapter.Vie
         holder.binding.txtVwHoraInit.text = lista[position].horaInit
         holder.binding.txtVwHoraEnd.text = lista[position].horaEnd
         holder.id = lista[position].index
+        holder.fecha = lista[position].fecha
     }
 
     //retorna el número de elementos que vamos a querer que tenga el contenedor padre
