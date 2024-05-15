@@ -5,8 +5,8 @@ import java.util.Calendar
 
 class VM : ViewModel() {
     var eventos: MutableList<Evento> = mutableListOf()
-    var usuarios:MutableList<Usuario> = mutableListOf()
-    lateinit var  currentUser:Usuario
+    var usuarios: MutableList<Usuario> = mutableListOf()
+    lateinit var currentUser: Usuario
 
     init {
         draftDemo()
@@ -50,13 +50,13 @@ class VM : ViewModel() {
         )
 
         usuarios.add(
-            Usuario("luis","12345",Role.GENERAL,1)
+            Usuario("luis", "12345", Role.GENERAL, 1)
         )
         usuarios.add(
-            Usuario("admin","12345",Role.ADMIN,2)
+            Usuario("admin", "12345", Role.ADMIN, 2)
         )
         usuarios.add(
-            Usuario("general","12345",Role.GENERAL,3)
+            Usuario("general", "12345", Role.GENERAL, 3)
         )
 
 
@@ -100,11 +100,33 @@ class VM : ViewModel() {
 
     }
 
-    fun searchID(id: Int): Evento? {
+    fun validateUser(username: String, password: String): Boolean {
+        var valid = false
+        usuarios.forEach {
+            if (it.username == username && it.password == password) {
+                valid = true
+                currentUser = searchIDUser(it.index)!!
+            }
+        }
+        return valid
+    }
+
+    fun searchIDEvent(id: Int): Evento? {
         var found: Evento? = null
         for (evento in eventos) {
             if (evento.index == id) {
                 found = evento
+                break
+            }
+        }
+        return found;
+    }
+
+    fun searchIDUser(id: Int): Usuario? {
+        var found: Usuario? = null
+        for (usuario in usuarios) {
+            if (usuario.index == id) {
+                found = usuario
                 break
             }
         }

@@ -49,7 +49,7 @@ class SecondFragment : Fragment() {
         if (id_Evento != -1) {
             creating = false
             binding.btnDelete.isEnabled = true
-            val current = (activity as MainActivity).viewModel.searchID(id_Evento)
+            val current = (activity as MainActivity).viewModel.searchIDEvent(id_Evento)
             current?.let {
 
                 binding.spinnerMotivo.setSelection(
