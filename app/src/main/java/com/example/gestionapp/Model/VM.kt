@@ -5,6 +5,8 @@ import java.util.Calendar
 
 class VM : ViewModel() {
     var eventos: MutableList<Evento> = mutableListOf()
+    var usuarios:MutableList<Usuario> = mutableListOf()
+    lateinit var  currentUser:Usuario
 
     init {
         draftDemo()
@@ -23,7 +25,7 @@ class VM : ViewModel() {
         )
 
         var calendar = Calendar.getInstance()
-        calendar.set(2024,5,10)
+        calendar.set(2024, 5, 10)
         eventos.add(
             Evento(
                 indexAsigment(),
@@ -35,7 +37,7 @@ class VM : ViewModel() {
             )
         )
 
-        calendar.set(2024,5,16)
+        calendar.set(2024, 5, 16)
         eventos.add(
             Evento(
                 indexAsigment(),
@@ -46,6 +48,18 @@ class VM : ViewModel() {
                 "Prueba 3"
             )
         )
+
+        usuarios.add(
+            Usuario("luis","12345",Role.GENERAL,1)
+        )
+        usuarios.add(
+            Usuario("admin","12345",Role.ADMIN,2)
+        )
+        usuarios.add(
+            Usuario("general","12345",Role.GENERAL,3)
+        )
+
+
     }
 
     private fun indexAsigment(): Int {
@@ -78,7 +92,7 @@ class VM : ViewModel() {
 
     fun deleteRegister(id: Int): Boolean {
         return try {
-            eventos.removeAt(id-1)
+            eventos.removeAt(id - 1)
             true
         } catch (e: Exception) {
             false
