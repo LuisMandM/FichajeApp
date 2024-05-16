@@ -95,7 +95,7 @@ class SecondFragment : Fragment() {
             selectedEnum(binding.spinnerMotivo.selectedItem.toString()), fecha,
             binding.edTxHoraInit.text.toString(),
             binding.edTxHoraEnd.text.toString(),
-            binding.edTxObservations.text.toString()
+            binding.edTxObservations.text.toString(),(activity as MainActivity).viewModel.currentUser
         )
 
         if ((activity as MainActivity).viewModel.updateRegister(current)) {
@@ -122,7 +122,8 @@ class SecondFragment : Fragment() {
             eventFecha,
             horaI,
             horaE,
-            notas
+            notas,
+
         )
 
         if (current) {

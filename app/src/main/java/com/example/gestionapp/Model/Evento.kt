@@ -9,7 +9,8 @@ class Evento(
     var fecha: Calendar,
     var horaInit: String,
     var horaEnd: String,
-    var notas: String
+    var notas: String,
+    var usuario: Usuario
 ) {
 
 

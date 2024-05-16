@@ -57,7 +57,7 @@ class FirstFragment : Fragment() {
 
     }
 
-    private fun loadEvents(calendar:Calendar){
+    private fun loadEvents(calendar: Calendar) {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val selectedDateStr = dateFormat.format(calendar.time)
         fecha = calendar
@@ -69,7 +69,8 @@ class FirstFragment : Fragment() {
         //loadEventsperDay()
         var currentEvents: MutableList<Evento> = mutableListOf()
         for (evento in (activity as MainActivity).viewModel.eventos) {
-            if (formatCalendar(evento.fecha) == formatCalendar(fecha)) {
+            if (formatCalendar(evento.fecha) == formatCalendar(fecha)
+                && evento.usuario == (activity as MainActivity).viewModel.currentUser) {
                 currentEvents.add(evento)
             }
         }

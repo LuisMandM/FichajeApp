@@ -13,6 +13,16 @@ class VM : ViewModel() {
     }
 
     private fun draftDemo() {
+        usuarios.add(
+            Usuario("luis", "12345", Role.GENERAL, 1)
+        )
+        usuarios.add(
+            Usuario("admin", "12345", Role.ADMIN, 2)
+        )
+        usuarios.add(
+            Usuario("general", "12345", Role.GENERAL, 3)
+        )
+
         eventos.add(
             Evento(
                 indexAsigment(),
@@ -20,7 +30,8 @@ class VM : ViewModel() {
                 Calendar.getInstance(),
                 "15:30",
                 "16:00",
-                "Prueba"
+                "Prueba",
+                usuarios[0]
             )
         )
 
@@ -33,7 +44,8 @@ class VM : ViewModel() {
                 Calendar.getInstance(),
                 "12:30",
                 "16:00",
-                "Prueba 2"
+                "Prueba 2",
+                usuarios[2]
             )
         )
 
@@ -45,19 +57,11 @@ class VM : ViewModel() {
                 Calendar.getInstance(),
                 "14:30",
                 "16:00",
-                "Prueba 3"
+                "Prueba 3", usuarios[1]
             )
         )
 
-        usuarios.add(
-            Usuario("luis", "12345", Role.GENERAL, 1)
-        )
-        usuarios.add(
-            Usuario("admin", "12345", Role.ADMIN, 2)
-        )
-        usuarios.add(
-            Usuario("general", "12345", Role.GENERAL, 3)
-        )
+
 
 
     }
@@ -69,7 +73,7 @@ class VM : ViewModel() {
     fun addRegister(tipo: EnumEvent, fecha: Calendar, horaI: String, horaE: String, notas: String):
             Boolean {
         try {
-            val current = Evento(indexAsigment(), tipo, fecha, horaI, horaE, notas)
+            val current = Evento(indexAsigment(), tipo, fecha, horaI, horaE, notas, currentUser)
             eventos.add(current)
             return true
         } catch (e: Exception) {
