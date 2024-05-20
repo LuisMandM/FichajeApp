@@ -1,5 +1,8 @@
 package com.example.gestionapp
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -46,23 +49,37 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val datos: SharedPreferences =
+            (activity as MainActivity).getSharedPreferences("user_Data", Context.MODE_PRIVATE)
+        if (datos.getString("username", "")?.isNotEmpty() ?: false &&
+            datos.getString("password", "")?.isNotEmpty() ?: false
+        ) findNavController().navigate(R.id.action_loginFragment_to_FirstFragment)
+
         binding.btnLogin.setOnClickListener {
+            if (binding.edTxUser.text.isNotEmpty() && binding.edTxPassword.text.isNotEmpty()) {
+                if (validacionLogin()) {
+                    val editor: Editor = datos.edit()
+                    editor.putString("username", binding.edTxUser.text.toString())
+                    editor.putString("password", binding.edTxPassword.text.toString())
+                    editor.apply()
+                    findNavController().navigate(R.id.action_loginFragment_to_FirstFragment)
+                } else Toast.makeText(
+                    (activity as MainActivity),
+                    "Error al iniciar sesion compruebe los datos e intente nuevamente",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
             validacionLogin()
         }
 
     }
 
-    private fun validacionLogin() {
-        if ((activity as MainActivity).viewModel.validateUser(
-                binding.edTxUser.text.toString(),
-                binding.edTxPassword.text.toString()
-            )
-        ) findNavController().navigate(R.id.action_loginFragment_to_FirstFragment)
-        else Toast.makeText(
-            (activity as MainActivity),
-            "Error al iniciar sesion compruebe los datos e intente nuevamente",
-            Toast.LENGTH_SHORT
-        ).show()
+    private fun validacionLogin(): Boolean {
+        return (activity as MainActivity).viewModel.validateUser(
+            binding.edTxUser.text.toString(),
+            binding.edTxPassword.text.toString()
+        )
     }
 
 }
