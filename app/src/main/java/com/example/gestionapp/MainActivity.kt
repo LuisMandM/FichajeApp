@@ -76,6 +76,11 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.FirstFragment)
     }
 
+    fun userInSession():String{
+        val datos: SharedPreferences = this.getSharedPreferences("user_Data", Context.MODE_PRIVATE)
+        return datos.getString("index", "") ?: ""
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
