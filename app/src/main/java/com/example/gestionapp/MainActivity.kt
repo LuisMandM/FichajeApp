@@ -12,8 +12,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import com.example.gestionapp.BBDD.BBDDParse
+import com.example.gestionapp.BBDD.Repositorio
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.EventoViewModelFactory
 import com.example.gestionapp.Model.VM
 import com.example.gestionapp.databinding.ActivityMainBinding
 import java.util.Calendar
@@ -23,7 +26,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     var eventos: MutableList<Evento> = mutableListOf()
-    val viewModel: VM by viewModels()
+    private val miRepositorio by lazy { Repositorio(BBDDParse()) }
+    val viewModel: VM by viewModels{EventoViewModelFactory(miRepositorio)}
     //var lateinit eventos : List<Evento>
 
     override fun onCreate(savedInstanceState: Bundle?) {
