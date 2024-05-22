@@ -28,4 +28,8 @@ class Repositorio(val parser: BBDDParse) {
         return parser.eventById(index)
     }
 
+    fun getKey(user:String, password:String):MutableLiveData<String>{
+        return parser.getKey(user,password)
+    }
+
 }

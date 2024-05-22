@@ -12,9 +12,10 @@ import java.util.Calendar
 class VM(private val repositorio: Repositorio) : ViewModel(){
     lateinit var eventos: MutableLiveData<List<Evento>>
     //var usuarios: MutableList<Usuario> = mutableListOf()
-    lateinit var currentUser: MutableLiveData<Usuario>
+    lateinit var currentUser: MutableLiveData<String>
     lateinit var numMax: MutableLiveData<Int>
     lateinit var currentEvent: MutableLiveData<Evento>
+
 
     fun mostrarEventos()= viewModelScope.launch {
         eventos = repositorio.mostrarEventos()
@@ -38,6 +39,9 @@ class VM(private val repositorio: Repositorio) : ViewModel(){
         currentEvent = repositorio.eventById(index)
     }
 
+    fun validateUser(user:String, password:String) = viewModelScope.launch {
+        currentUser = repositorio.getKey(user,password)
+    }
 
 
 
@@ -195,7 +199,7 @@ class VM(private val repositorio: Repositorio) : ViewModel(){
     }*/
 }
 
-class PeliculasViewModelFactory(private val miRepositorio: Repositorio) :
+class EventoViewModelFactory(private val miRepositorio: Repositorio) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VM::class.java)) {

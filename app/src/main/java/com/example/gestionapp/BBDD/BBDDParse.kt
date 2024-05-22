@@ -3,6 +3,7 @@ package com.example.gestionapp.BBDD
 import androidx.lifecycle.MutableLiveData
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Usuario
 import com.example.gestionapp.Model.Utilitties
 import com.example.gestionapp.Model.VM
 import com.parse.ParseObject
@@ -107,6 +108,22 @@ class BBDDParse {
                     i.getString("Usuario") ?: ""
                 )
                 current.postValue(evento)
+            } else {
+                throw Exception(parseException)
+            }
+        }
+        return current
+    }
+
+    fun getKey(user:String, password:String):MutableLiveData<String>{
+        val current = MutableLiveData<String>()
+        val query = ParseQuery.getQuery<ParseObject>("Eventos")
+        query.whereEqualTo("User", user)
+        query.getFirstInBackground { i, parseException ->
+            if (parseException == null) {
+                if (i.getString("Password").equals(password)){
+                    current.postValue(i.getString("objectId"))
+                }else current.postValue("")
             } else {
                 throw Exception(parseException)
             }
