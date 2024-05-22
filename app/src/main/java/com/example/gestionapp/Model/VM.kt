@@ -1,14 +1,59 @@
 package com.example.gestionapp.Model
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.gestionapp.BBDD.Repositorio
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
-class VM : ViewModel() {
-    var eventos: MutableList<Evento> = mutableListOf()
-    var usuarios: MutableList<Usuario> = mutableListOf()
-    lateinit var currentUser: Usuario
+class VM(private val repositorio: Repositorio) : ViewModel(){
+    lateinit var eventos: MutableLiveData<List<Evento>>
+    //var usuarios: MutableList<Usuario> = mutableListOf()
+    lateinit var currentUser: MutableLiveData<Usuario>
+    lateinit var numMax: MutableLiveData<Int>
+    lateinit var currentEvent: MutableLiveData<Evento>
 
-    init {
+    fun mostrarEventos()= viewModelScope.launch {
+        eventos = repositorio.mostrarEventos()
+    }
+
+    fun insertEvent(current:Evento){
+        repositorio.insertarEvento(current)
+    }
+    fun deleteEvent(current:Evento){
+        repositorio.borrarEvento(current)
+    }
+    fun updateEvent(current:Evento){
+        repositorio.modificarEvento(current)
+    }
+
+    fun idMax()= viewModelScope.launch {
+        numMax = repositorio.idMaximo()
+    }
+
+    fun buscar(index :Int)= viewModelScope.launch {
+        currentEvent = repositorio.eventById(index)
+    }
+
+
+
+
+    fun searchIDEvent(id: Int): Evento? {
+        var found: Evento? = null
+        for (evento in eventos) {
+            if (evento.index == id) {
+                found = evento
+                break
+            }
+        }
+        return found;
+    }
+
+
+    /*init {
         draftDemo()
     }
 
@@ -103,8 +148,8 @@ class VM : ViewModel() {
         }
 
     }
-
-    fun validateUser(username: String, password: String): Boolean {
+*/
+    /*fun validateUser(username: String, password: String): Boolean {
         var valid = false
         usuarios.forEach {
             if (it.username == username && it.password == password) {
@@ -125,8 +170,8 @@ class VM : ViewModel() {
         }
         return found;
     }
-
-    fun searchIDUser(id: String): Usuario? {
+*/
+    /*fun searchIDUser(id: String): Usuario? {
         var found: Usuario? = null
         for (usuario in usuarios) {
             if (usuario.index == id) {
@@ -135,17 +180,10 @@ class VM : ViewModel() {
             }
         }
         return found;
-    }
+    }*/
 
-    fun indexEnum(tipo: EnumEvent): Int {
-        return when (tipo) {
-            EnumEvent.GENERAL -> 0
-            EnumEvent.GUARDIA -> 1
-            EnumEvent.REPORTE_HORARIO -> 2
-        }
-    }
 
-    private fun eventIndex(id: Int): Int {
+    /*private fun eventIndex(id: Int): Int {
         var index = -1
         for (i in 0..eventos.size - 1) {
             if (eventos[i].index == id) {
@@ -154,5 +192,16 @@ class VM : ViewModel() {
             }
         }
         return index
+    }*/
+}
+
+class PeliculasViewModelFactory(private val miRepositorio: Repositorio) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VM::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return VM(miRepositorio) as T
+        }
+        throw IllegalArgumentException("ViewModel class desconocida")
     }
 }
