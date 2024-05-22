@@ -1,5 +1,7 @@
 package com.example.gestionapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -67,15 +69,23 @@ class FirstFragment : Fragment() {
             Toast.LENGTH_SHORT
         ).show()*/
         //loadEventsperDay()
-        var currentEvents: MutableList<Evento> = mutableListOf()
-        for (evento in (activity as MainActivity).viewModel.eventos) {
-            if (formatCalendar(evento.fecha) == formatCalendar(fecha)
-                && evento.usuario == (activity as MainActivity).viewModel.currentUser) {
-                currentEvents.add(evento)
+        (activity as MainActivity).viewModel.mostrarEventos()
+        (activity as MainActivity).viewModel.eventos.observe(activity as MainActivity){
+            val datos: SharedPreferences =
+                (activity as MainActivity).getSharedPreferences("user_Data", Context.MODE_PRIVATE)
+            val user = datos.getString("index", "") ?: ""
+            val currentEvents: MutableList<Evento> = mutableListOf()
+            for (evento in it) {
+                if (formatCalendar(evento.fecha) == formatCalendar(fecha)
+                    && evento.usuario == user) {
+                    currentEvents.add(evento)
+                }
             }
+            binding.eventRecycler.layoutManager = LinearLayoutManager(activity)
+            binding.eventRecycler.adapter = Adapter(currentEvents)
         }
-        binding.eventRecycler.layoutManager = LinearLayoutManager(activity as MainActivity)
-        binding.eventRecycler.adapter = Adapter(currentEvents)
+
+
 
     }
 
