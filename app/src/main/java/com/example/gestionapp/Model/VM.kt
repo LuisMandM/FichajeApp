@@ -45,7 +45,7 @@ class VM(private val repositorio: Repositorio) : ViewModel(){
 
 
 
-    fun searchIDEvent(id: Int): Evento? {
+   /* fun searchIDEvent(id: Int): Evento? {
         var found: Evento? = null
         for (evento in eventos) {
             if (evento.index == id) {
@@ -54,7 +54,7 @@ class VM(private val repositorio: Repositorio) : ViewModel(){
             }
         }
         return found;
-    }
+    }*/
 
 
     /*init {
