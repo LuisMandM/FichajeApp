@@ -52,15 +52,18 @@ class LoginFragment : Fragment() {
         val datos: SharedPreferences =
             (activity as MainActivity).getSharedPreferences("user_Data", Context.MODE_PRIVATE)
         if (datos.getString("username", "")?.isNotEmpty() ?: false &&
-            datos.getString("password", "")?.isNotEmpty() ?: false
+            datos.getString("password", "")?.isNotEmpty() ?: false &&
+            datos.getString("index", "")?.isNotEmpty() ?: false
         ) findNavController().navigate(R.id.action_loginFragment_to_FirstFragment)
 
         binding.btnLogin.setOnClickListener {
             if (binding.edTxUser.text.isNotEmpty() && binding.edTxPassword.text.isNotEmpty()) {
-                if (validacionLogin()) {
+                val index = validacionLogin()
+                if (index.isNotEmpty()) {
                     val editor: Editor = datos.edit()
                     editor.putString("username", binding.edTxUser.text.toString())
                     editor.putString("password", binding.edTxPassword.text.toString())
+                    editor.putString("index", index)
                     editor.apply()
                     findNavController().navigate(R.id.action_loginFragment_to_FirstFragment)
                 } else Toast.makeText(
@@ -75,11 +78,25 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun validacionLogin(): Boolean {
-        return (activity as MainActivity).viewModel.validateUser(
+    private fun validacionLogin(): String {
+        var key = ""
+        (activity as MainActivity).viewModel.validateUser(
             binding.edTxUser.text.toString(),
             binding.edTxPassword.text.toString()
         )
+        (activity as MainActivity).viewModel.currentUser.observe(activity as MainActivity) {
+            it.let {
+                key = it
+            }
+        }
+        return key
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        (activity as MainActivity).viewModel.currentUser.removeObservers(activity as MainActivity)
+
     }
 
 }
