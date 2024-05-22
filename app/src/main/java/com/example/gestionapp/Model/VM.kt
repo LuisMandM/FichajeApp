@@ -14,13 +14,13 @@ class VM : ViewModel() {
 
     private fun draftDemo() {
         usuarios.add(
-            Usuario("luis", "12345", Role.GENERAL, 1)
+            Usuario("luis", "12345", Role.GENERAL, "1")
         )
         usuarios.add(
-            Usuario("admin", "12345", Role.ADMIN, 2)
+            Usuario("admin", "12345", Role.ADMIN, "2")
         )
         usuarios.add(
-            Usuario("general", "12345", Role.GENERAL, 3)
+            Usuario("general", "12345", Role.GENERAL, "3")
         )
 
         eventos.add(
@@ -31,7 +31,7 @@ class VM : ViewModel() {
                 "15:30",
                 "16:00",
                 "Prueba",
-                usuarios[0]
+                usuarios[0].index
             )
         )
 
@@ -45,7 +45,7 @@ class VM : ViewModel() {
                 "12:30",
                 "16:00",
                 "Prueba 2",
-                usuarios[2]
+                usuarios[2].index
             )
         )
 
@@ -57,7 +57,7 @@ class VM : ViewModel() {
                 Calendar.getInstance(),
                 "14:30",
                 "16:00",
-                "Prueba 3", usuarios[1]
+                "Prueba 3", usuarios[1].index
             )
         )
 
@@ -73,7 +73,7 @@ class VM : ViewModel() {
     fun addRegister(tipo: EnumEvent, fecha: Calendar, horaI: String, horaE: String, notas: String):
             Boolean {
         try {
-            val current = Evento(indexAsigment(), tipo, fecha, horaI, horaE, notas, currentUser)
+            val current = Evento(indexAsigment(), tipo, fecha, horaI, horaE, notas, currentUser.index)
             eventos.add(current)
             return true
         } catch (e: Exception) {
@@ -126,7 +126,7 @@ class VM : ViewModel() {
         return found;
     }
 
-    fun searchIDUser(id: Int): Usuario? {
+    fun searchIDUser(id: String): Usuario? {
         var found: Usuario? = null
         for (usuario in usuarios) {
             if (usuario.index == id) {
