@@ -76,9 +76,9 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.FirstFragment)
     }
 
-    fun userInSession():String{
+    fun userInSession():Int{
         val datos: SharedPreferences = this.getSharedPreferences("user_Data", Context.MODE_PRIVATE)
-        return datos.getString("index", "") ?: ""
+        return datos.getInt("index", 0) ?: 0
     }
 
     override fun onSupportNavigateUp(): Boolean {
