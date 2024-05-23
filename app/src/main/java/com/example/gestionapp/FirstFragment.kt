@@ -107,6 +107,7 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        (activity as MainActivity).viewModel.eventos.removeObservers(activity as MainActivity)
         //(activity as MainActivity).viewModel.eventos.removeObservers(activity as MainActivity)
     }
 

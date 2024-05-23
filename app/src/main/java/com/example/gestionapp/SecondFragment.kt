@@ -27,6 +27,8 @@ class SecondFragment : Fragment() {
     private var fecha: Calendar = Calendar.getInstance()
     private var id_Evento: Int = -1
     private var creating: Boolean = true
+    private var obsNum:Boolean = false
+    private var obsCurrentE:Boolean = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -250,6 +252,8 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        if (creating)(activity as MainActivity).viewModel.numMax.removeObservers(activity as MainActivity)
+        else (activity as MainActivity).viewModel.currentEvent.removeObservers(activity as MainActivity)
 
     }
 }
