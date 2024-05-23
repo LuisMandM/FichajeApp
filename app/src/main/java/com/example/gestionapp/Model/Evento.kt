@@ -10,7 +10,7 @@ data class Evento(
     var horaInit: String,
     var horaEnd: String,
     var notas: String,
-    var usuario: String
+    var usuario: Int
 ) {
 
 
