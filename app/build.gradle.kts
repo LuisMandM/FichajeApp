@@ -51,4 +51,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation ("androidx.recyclerview:recyclerview:1.3.2")
     implementation("com.github.parse-community.Parse-SDK-Android:parse:1.25.0")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.0.3")
 }
