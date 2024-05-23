@@ -29,7 +29,7 @@ class BBDDParse {
                         i.getString("HoraInit") ?: "",
                         i.getString("HoraEnd") ?: "",
                         i.getString("notas") ?: "",
-                        i.getInt("Usuario") ?: 0
+                        i.getInt("usuario") ?: 0
                     )
                 }
                 currentEventos.postValue(eventos)
