@@ -2,6 +2,7 @@ package com.example.gestionapp.BBDD
 
 import androidx.lifecycle.MutableLiveData
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Usuario
 
 class Repositorio(val parser: BBDDParse) {
     fun mostrarEventos(): MutableLiveData<List<Evento>> {
@@ -30,6 +31,10 @@ class Repositorio(val parser: BBDDParse) {
 
     fun getKey(user:String, password:String):MutableLiveData<String>{
         return parser.getKey(user,password)
+    }
+
+    fun mostrarUsuarios():MutableLiveData<List<Usuario>>{
+        return parser.mostrarUsuarios()
     }
 
 }

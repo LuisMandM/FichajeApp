@@ -1,20 +1,19 @@
 package com.example.gestionapp.Model
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.gestionapp.BBDD.Repositorio
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 class VM(private val repositorio: Repositorio) : ViewModel(){
     lateinit var eventos: MutableLiveData<List<Evento>>
     //var usuarios: MutableList<Usuario> = mutableListOf()
-    lateinit var currentUser: MutableLiveData<String>
+    //lateinit var currentUser: MutableLiveData<String>
     lateinit var numMax: MutableLiveData<Int>
     lateinit var currentEvent: MutableLiveData<Evento>
+    lateinit var usuarios: MutableLiveData<List<Usuario>>
 
 
     fun mostrarEventos()= viewModelScope.launch {
@@ -35,14 +34,17 @@ class VM(private val repositorio: Repositorio) : ViewModel(){
         numMax = repositorio.idMaximo()
     }
 
-    fun buscar(index :Int)= viewModelScope.launch {
+    fun searchEvent(index :Int)= viewModelScope.launch {
         currentEvent = repositorio.eventById(index)
     }
 
-    fun validateUser(user:String, password:String) = viewModelScope.launch {
+    /*fun validateUser(user:String, password:String) = viewModelScope.launch {
         currentUser = repositorio.getKey(user,password)
-    }
+    }*/
 
+    fun showUsers() = viewModelScope.launch {
+        usuarios = repositorio.mostrarUsuarios()
+    }
 
 
    /* fun searchIDEvent(id: Int): Evento? {

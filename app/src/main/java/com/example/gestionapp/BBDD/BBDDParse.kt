@@ -3,11 +3,14 @@ package com.example.gestionapp.BBDD
 import androidx.lifecycle.MutableLiveData
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Role
 import com.example.gestionapp.Model.Usuario
 import com.example.gestionapp.Model.Utilitties
 import com.example.gestionapp.Model.VM
 import com.parse.ParseObject
 import com.parse.ParseQuery
+import com.parse.ParseUser
+import com.parse.PointerEncoder
 import java.util.Calendar
 
 class BBDDParse {
@@ -29,6 +32,7 @@ class BBDDParse {
                         i.getString("Usuario") ?: ""
                     )
                 }
+                currentEventos.postValue(eventos)
             }
         }
         return currentEventos
@@ -42,7 +46,6 @@ class BBDDParse {
         registro.put("HoraInit", current.horaInit)
         registro.put("HoraEnd", current.horaEnd)
         registro.put("notas", current.notas)
-        registro.put("Usuario", current.usuario)
         registro.saveInBackground {
             if (it != null) {
                 it.localizedMessage?.let { message ->
@@ -115,9 +118,27 @@ class BBDDParse {
         return current
     }
 
+    fun mostrarUsuarios(): MutableLiveData<List<Usuario>> {
+        val currentEventos: MutableLiveData<List<Usuario>> = MutableLiveData()
+        val query = ParseQuery.getQuery<ParseObject>("Usuarios")
+        query.findInBackground() { objects, e ->
+            if (e == null) {
+                val usuarios = objects.map { i ->
+                    Usuario(
+                        i.getString("User")?:"",
+                        i.getString("Password")?:"",
+                        Role.GENERAL, i.getInt("index")?:-1
+                    )
+                }
+                currentEventos.postValue(usuarios)
+            }
+        }
+        return currentEventos
+    }
+
     fun getKey(user:String, password:String):MutableLiveData<String>{
         val current = MutableLiveData<String>()
-        val query = ParseQuery.getQuery<ParseObject>("Eventos")
+        val query = ParseQuery.getQuery<ParseObject>("Usuarios")
         query.whereEqualTo("User", user)
         query.getFirstInBackground { i, parseException ->
             if (parseException == null) {
@@ -125,11 +146,14 @@ class BBDDParse {
                     current.postValue(i.getString("objectId"))
                 }else current.postValue("")
             } else {
+                print(parseException)
                 throw Exception(parseException)
             }
         }
         return current
     }
+
+
 
     fun buscarIdMaximo(): MutableLiveData<Int> {
         val query =
