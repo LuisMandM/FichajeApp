@@ -73,7 +73,7 @@ class FirstFragment : Fragment() {
         (activity as MainActivity).viewModel.eventos.observe(activity as MainActivity){
             val datos: SharedPreferences =
                 (activity as MainActivity).getSharedPreferences("user_Data", Context.MODE_PRIVATE)
-            val user = datos.getString("index", "") ?: ""
+            val user = datos.getInt("index", 0) ?: 0
             val currentEvents: MutableList<Evento> = mutableListOf()
             for (evento in it) {
                 if (formatCalendar(evento.fecha) == formatCalendar(fecha)
@@ -107,7 +107,7 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        (activity as MainActivity).viewModel.currentUser.removeObservers(activity as MainActivity)
+        //(activity as MainActivity).viewModel.eventos.removeObservers(activity as MainActivity)
     }
 
 

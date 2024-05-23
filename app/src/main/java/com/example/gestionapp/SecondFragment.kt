@@ -11,10 +11,12 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Utilitties
 import com.example.gestionapp.databinding.FragmentSecondBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -49,7 +51,17 @@ class SecondFragment : Fragment() {
         if (id_Evento != -1) {
             creating = false
             binding.btnDelete.isEnabled = true
-            val current = (activity as MainActivity).viewModel.searchIDEvent(id_Evento)
+
+            (activity as MainActivity).viewModel.searchEvent(id_Evento)
+            (activity as MainActivity).viewModel.currentEvent.observe(activity as MainActivity) {
+                binding.spinnerMotivo.setSelection(
+                    Utilitties().indexEnum(it.tipo)
+                )
+                binding.edTxHoraInit.setText(it.horaInit)
+                binding.edTxHoraEnd.setText(it.horaEnd)
+                binding.edTxObservations.setText(it.notas)
+            }
+            /*val current = (activity as MainActivity).viewModel.searchIDEvent(id_Evento)
             current?.let {
 
                 binding.spinnerMotivo.setSelection(
@@ -58,7 +70,7 @@ class SecondFragment : Fragment() {
                 binding.edTxHoraInit.setText(current.horaInit)
                 binding.edTxHoraEnd.setText(current.horaEnd)
                 binding.edTxObservations.setText(current.notas)
-            }
+            }*/
         } else {
             binding.btnDelete.isEnabled = false
         }
@@ -77,16 +89,36 @@ class SecondFragment : Fragment() {
     }
 
     private fun deleteEvent() {
-        if ((activity as MainActivity).viewModel.deleteRegister(id_Evento)) {
+
+        try {
+            (activity as MainActivity).viewModel.currentEvent.observe(activity as MainActivity) {
+                (activity as MainActivity).viewModel.deleteEvent(it)
+                Toast.makeText(
+                    (activity as MainActivity), "Registro Eliminado Correctamente",
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+            }
+
+
+        } catch (error: Exception) {
             Toast.makeText(
-                (activity as MainActivity), "Registro Eliminado Correctamente",
+                (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
                 Toast.LENGTH_SHORT
             ).show()
-            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
-        } else Toast.makeText(
-            (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
-            Toast.LENGTH_SHORT
-        ).show()
+        }
+
+
+        /* if ((activity as MainActivity).viewModel.deleteRegister(id_Evento)) {
+             Toast.makeText(
+                 (activity as MainActivity), "Registro Eliminado Correctamente",
+                 Toast.LENGTH_SHORT
+             ).show()
+             findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+         } else Toast.makeText(
+             (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+             Toast.LENGTH_SHORT
+         ).show()*/
     }
 
     private fun updateEvent() {
@@ -95,10 +127,24 @@ class SecondFragment : Fragment() {
             selectedEnum(binding.spinnerMotivo.selectedItem.toString()), fecha,
             binding.edTxHoraInit.text.toString(),
             binding.edTxHoraEnd.text.toString(),
-            binding.edTxObservations.text.toString(),(activity as MainActivity).viewModel.currentUser
+            binding.edTxObservations.text.toString(), (activity as MainActivity).userInSession()
         )
 
-        if ((activity as MainActivity).viewModel.updateRegister(current)) {
+        try {
+            (activity as MainActivity).viewModel.updateEvent(current)
+            Toast.makeText(
+                (activity as MainActivity), "Registro Actualizado Correctamente",
+                Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+        } catch (e: Exception) {
+            Toast.makeText(
+                (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        /*if ((activity as MainActivity).viewModel.updateRegister(current)) {
             Toast.makeText(
                 (activity as MainActivity), "Registro Actualizado Correctamente",
                 Toast.LENGTH_SHORT
@@ -107,12 +153,44 @@ class SecondFragment : Fragment() {
         } else Toast.makeText(
             (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
             Toast.LENGTH_SHORT
-        ).show()
+        ).show()*/
 
     }
 
     private fun SaveEvent() {
-        val tipo = binding.spinnerMotivo.selectedItem.toString()
+
+        (activity as MainActivity).viewModel.idMax()
+        (activity as MainActivity).viewModel.numMax.observe(activity as MainActivity) {
+            val tipo = binding.spinnerMotivo.selectedItem.toString()
+            val horaI = binding.edTxHoraInit.text.toString()
+            val horaE = binding.edTxHoraEnd.text.toString()
+            val notas = binding.edTxObservations.text.toString()
+            val eventFecha = fecha
+            val current = Evento(
+                it +1, selectedEnum(tipo),
+                eventFecha,
+                horaI,
+                horaE,
+                notas, (activity as MainActivity).userInSession()
+            )
+
+            try {
+                (activity as MainActivity).viewModel.insertEvent(current)
+                Toast.makeText(
+                    (activity as MainActivity), "Registro Guardado Correctamente",
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+            } catch (e: Exception) {
+                Toast.makeText(
+                    (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+                    Toast.LENGTH_SHORT
+                ).show()
+                print(e)
+            }
+        }
+
+        /*val tipo = binding.spinnerMotivo.selectedItem.toString()
         val horaI = binding.edTxHoraInit.text.toString()
         val horaE = binding.edTxHoraEnd.text.toString()
         val notas = binding.edTxObservations.text.toString()
@@ -124,7 +202,7 @@ class SecondFragment : Fragment() {
             horaE,
             notas,
 
-        )
+            )
 
         if (current) {
             Toast.makeText(
@@ -137,7 +215,7 @@ class SecondFragment : Fragment() {
                 (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
                 Toast.LENGTH_SHORT
             ).show()
-        }
+        }*/
     }
 
     private fun fillSpinner() {

@@ -46,6 +46,7 @@ class BBDDParse {
         registro.put("HoraInit", current.horaInit)
         registro.put("HoraEnd", current.horaEnd)
         registro.put("notas", current.notas)
+        registro.put("usuario",current.usuario)
         registro.saveInBackground {
             if (it != null) {
                 it.localizedMessage?.let { message ->
