@@ -1,5 +1,9 @@
 package com.example.gestionapp.Model
 
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
 class Utilitties {
 
     public fun enumValue(index:Int):EnumEvent{
@@ -17,5 +21,11 @@ class Utilitties {
             EnumEvent.GUARDIA -> 1
             EnumEvent.REPORTE_HORARIO -> 2
         }
+    }
+
+    fun formatCalendar(dateRaw: Calendar): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val format = dateFormat.format(dateRaw.time)
+        return format
     }
 }

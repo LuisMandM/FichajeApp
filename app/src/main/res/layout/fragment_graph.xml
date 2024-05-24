@@ -18,4 +18,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.446" />
 
+    <Button
+        android:id="@+id/bttonGeneralReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reporte general"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.835"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pieChart" />
+
+    <Button
+        android:id="@+id/bttonDailyReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reporte del Dia"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pieChart" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

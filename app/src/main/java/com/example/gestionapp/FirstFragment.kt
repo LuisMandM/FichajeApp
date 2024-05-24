@@ -85,7 +85,8 @@ class FirstFragment : Fragment() {
             binding.eventRecycler.adapter = Adapter(currentEvents)
         }
         binding.btonSeeReport.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_graphFragment)
+            val bundle = bundleOf("fecha" to fecha.timeInMillis)
+            findNavController().navigate(R.id.action_FirstFragment_to_graphFragment,bundle)
         }
 
 
