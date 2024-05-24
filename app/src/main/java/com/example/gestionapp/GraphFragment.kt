@@ -6,10 +6,17 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.graphics.red
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
@@ -62,6 +69,33 @@ class GraphFragment : Fragment() {
             generalReport = false
             loadPie()
         }
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(R.menu.menu_chart, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.itemGeneralR -> {
+                        generalReport = true
+                        loadPie()
+                        true
+                    }
+
+                    R.id.itemDailyR -> {
+                        generalReport = false
+                        loadPie()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
 
     }
