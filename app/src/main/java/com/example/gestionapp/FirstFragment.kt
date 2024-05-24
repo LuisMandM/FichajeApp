@@ -84,6 +84,9 @@ class FirstFragment : Fragment() {
             binding.eventRecycler.layoutManager = LinearLayoutManager(activity)
             binding.eventRecycler.adapter = Adapter(currentEvents)
         }
+        binding.btonSeeReport.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_graphFragment)
+        }
 
 
 
