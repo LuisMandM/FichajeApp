@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemGeneralR"
+        android:title="Reporte General" />
+
+    <item
+        android:id="@+id/itemDailyR"
+        android:title="Reporte Diario" />
+</menu>

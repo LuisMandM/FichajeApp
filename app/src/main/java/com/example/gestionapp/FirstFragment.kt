@@ -1,12 +1,20 @@
 package com.example.gestionapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gestionapp.Model.Evento
@@ -54,10 +62,30 @@ class FirstFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
         }
 
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(R.menu.menu_first_fragment, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.item_Logout -> {
+                        (activity as MainActivity).logout()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+
 
     }
 
-    private fun loadEvents(calendar:Calendar){
+    private fun loadEvents(calendar: Calendar) {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val selectedDateStr = dateFormat.format(calendar.time)
         fecha = calendar
@@ -67,14 +95,27 @@ class FirstFragment : Fragment() {
             Toast.LENGTH_SHORT
         ).show()*/
         //loadEventsperDay()
-        var currentEvents: MutableList<Evento> = mutableListOf()
-        for (evento in (activity as MainActivity).viewModel.eventos) {
-            if (formatCalendar(evento.fecha) == formatCalendar(fecha)) {
-                currentEvents.add(evento)
+        (activity as MainActivity).viewModel.mostrarEventos()
+        (activity as MainActivity).viewModel.eventos.observe(activity as MainActivity){
+            val datos: SharedPreferences =
+                (activity as MainActivity).getSharedPreferences("user_Data", Context.MODE_PRIVATE)
+            val user = datos.getInt("index", 0) ?: 0
+            val currentEvents: MutableList<Evento> = mutableListOf()
+            for (evento in it) {
+                if (formatCalendar(evento.fecha) == formatCalendar(fecha)
+                    && evento.usuario == user) {
+                    currentEvents.add(evento)
+                }
             }
+            binding.eventRecycler.layoutManager = LinearLayoutManager(activity)
+            binding.eventRecycler.adapter = Adapter(currentEvents)
         }
-        binding.eventRecycler.layoutManager = LinearLayoutManager(activity as MainActivity)
-        binding.eventRecycler.adapter = Adapter(currentEvents)
+        binding.btonSeeReport.setOnClickListener {
+            val bundle = bundleOf("fecha" to fecha.timeInMillis)
+            findNavController().navigate(R.id.action_FirstFragment_to_graphFragment,bundle)
+        }
+
+
 
     }
 
@@ -96,6 +137,8 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        (activity as MainActivity).viewModel.eventos.removeObservers(activity as MainActivity)
+        //(activity as MainActivity).viewModel.eventos.removeObservers(activity as MainActivity)
     }
 
 
