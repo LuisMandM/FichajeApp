@@ -59,7 +59,7 @@ class GraphFragment : Fragment() {
         //loadChar()
         fechaEvent()
         loadPie()
-        
+
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
