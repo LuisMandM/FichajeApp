@@ -4,10 +4,16 @@ import android.R
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.Evento
@@ -27,8 +33,8 @@ class SecondFragment : Fragment() {
     private var fecha: Calendar = Calendar.getInstance()
     private var id_Evento: Int = -1
     private var creating: Boolean = true
-    private var obsNum:Boolean = false
-    private var obsCurrentE:Boolean = false
+    private var obsNum: Boolean = false
+    private var obsCurrentE: Boolean = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -86,6 +92,27 @@ class SecondFragment : Fragment() {
         binding.btnDelete.setOnClickListener {
             deleteEvent()
         }
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(com.example.gestionapp.R.menu.menu_secondfragment, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    com.example.gestionapp.R.id.itemSave -> {
+                        if (creating) SaveEvent()
+                        else updateEvent()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
 
     }
@@ -169,7 +196,7 @@ class SecondFragment : Fragment() {
             val notas = binding.edTxObservations.text.toString()
             val eventFecha = fecha
             val current = Evento(
-                it +1, selectedEnum(tipo),
+                it + 1, selectedEnum(tipo),
                 eventFecha,
                 horaI,
                 horaE,
@@ -252,7 +279,7 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        if (creating)(activity as MainActivity).viewModel.numMax.removeObservers(activity as MainActivity)
+        if (creating) (activity as MainActivity).viewModel.numMax.removeObservers(activity as MainActivity)
         else (activity as MainActivity).viewModel.currentEvent.removeObservers(activity as MainActivity)
 
     }

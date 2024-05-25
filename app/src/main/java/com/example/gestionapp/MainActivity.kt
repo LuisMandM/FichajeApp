@@ -55,16 +55,16 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.item_Logout -> {
+            /*R.id.item_Logout -> {
                 logout()
                 true
-            }
+            }*/
 
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun logout() {
+    fun logout() {
         val datos: SharedPreferences = this.getSharedPreferences("user_Data", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = datos.edit()
         editor.putString("username", "")
