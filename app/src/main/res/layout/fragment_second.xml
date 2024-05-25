@@ -58,13 +58,16 @@
             android:layout_width="182dp"
             android:layout_height="75dp"
             android:layout_weight="1"
-            android:text="Motivo" />
+            android:text="Motivo"
+            android:fontFamily="@font/antipastodemibold"
+            android:textSize="22sp"/>
 
         <Spinner
             android:id="@+id/spinnerMotivo"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -81,7 +84,9 @@
             android:id="@+id/switchRango"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Rango de Hora" />
+            android:text="Rango de Hora"
+            android:fontFamily="@font/antipastodemibold"
+            android:textSize="22sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,7 +98,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Hora Inicial" />
+                android:text="Hora Inicial"
+                android:fontFamily="@font/antipastodemibold"
+                android:textSize="22sp"/>
 
             <EditText
                 android:id="@+id/edTxHoraInit"
@@ -102,6 +109,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Hora Inicial"
+                android:fontFamily="@font/antipastoregular"
+                android:textSize="22sp"
                 android:inputType="time" />
 
         </LinearLayout>
@@ -116,7 +125,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Hora Final" />
+                android:text="Hora Final"
+                android:fontFamily="@font/antipastodemibold"
+                android:textSize="22sp"/>
 
             <EditText
                 android:id="@+id/edTxHoraEnd"
@@ -125,6 +136,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Hora Final"
+                android:fontFamily="@font/antipastoregular"
+                android:textSize="22sp"
                 android:inputType="time" />
 
         </LinearLayout>
@@ -147,7 +160,9 @@
             android:id="@+id/txtVwObservations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Observaciones" />
+            android:text="Observaciones"
+            android:fontFamily="@font/antipastodemibold"
+            android:textSize="18sp"/>
 
         <EditText
             android:id="@+id/edTxObservations"
@@ -156,6 +171,8 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="Anotaciones"
+            android:fontFamily="@font/antipastoregular"
+            android:textSize="22sp"
             android:inputType="textMultiLine" />
 
     </LinearLayout>
@@ -174,14 +191,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Guardar" />
+            android:text="Guardar"
+            android:backgroundTint="@color/inc"
+            android:fontFamily="@font/antipastodemibold"
+            android:textSize="16sp"
+            />
 
         <Button
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Eliminar" />
+            android:text="Eliminar"
+            android:backgroundTint="@color/inc"
+            android:fontFamily="@font/antipastodemibold"
+            android:textSize="16sp"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
