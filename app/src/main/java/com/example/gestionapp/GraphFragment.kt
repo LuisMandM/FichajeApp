@@ -59,16 +59,7 @@ class GraphFragment : Fragment() {
         //loadChar()
         fechaEvent()
         loadPie()
-
-        binding.bttonGeneralReport.setOnClickListener {
-            generalReport = true
-            loadPie()
-        }
-
-        binding.bttonDailyReport.setOnClickListener {
-            generalReport = false
-            loadPie()
-        }
+        
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
