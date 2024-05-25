@@ -2,6 +2,7 @@ package com.example.gestionapp
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.example.gestionapp.Model.EventoViewModelFactory
 import com.example.gestionapp.Model.VM
 import com.example.gestionapp.databinding.ActivityMainBinding
 import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +44,22 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+
+
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(updateBaseContextLocale(base))
+    }
+
+    private fun updateBaseContextLocale(context: Context): Context {
+        val locale = Locale("es")
+        Locale.setDefault(locale)
+
+        val configuration = Configuration(context.resources.configuration)
+        configuration.setLocale(locale)
+
+        return context.createConfigurationContext(configuration)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
