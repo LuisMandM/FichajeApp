@@ -72,8 +72,10 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Borramos la pila de fragmentos
-        navController.popBackStack(R.id.FirstFragment, false)
-        navController.navigate(R.id.FirstFragment)
+        navController.popBackStack(R.id.loginFragment, false)
+        navController.navigate(R.id.loginFragment)
+
+
     }
 
     fun userInSession():Int{
