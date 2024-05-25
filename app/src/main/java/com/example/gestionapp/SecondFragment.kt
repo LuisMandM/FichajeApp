@@ -33,6 +33,7 @@ class SecondFragment : Fragment() {
     private var fecha: Calendar = Calendar.getInstance()
     private var id_Evento: Int = -1
     private var creating: Boolean = true
+    private var correctExit: Boolean = false
     private var obsNum: Boolean = false
     private var obsCurrentE: Boolean = false
 
@@ -80,7 +81,7 @@ class SecondFragment : Fragment() {
                 binding.edTxObservations.setText(current.notas)
             }*/
         } else {
-            binding.btnDelete.isEnabled = false
+            binding.btnDelete.text = "Cancelar"
         }
 
 
@@ -90,7 +91,9 @@ class SecondFragment : Fragment() {
         }
 
         binding.btnDelete.setOnClickListener {
-            deleteEvent()
+            if (!creating) deleteEvent()
+            else findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+
         }
 
         val menuHost: MenuHost = requireActivity()
@@ -205,6 +208,7 @@ class SecondFragment : Fragment() {
 
             try {
                 (activity as MainActivity).viewModel.insertEvent(current)
+                correctExit = true
                 Toast.makeText(
                     (activity as MainActivity), "Registro Guardado Correctamente",
                     Toast.LENGTH_SHORT
@@ -279,7 +283,9 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        if (creating) (activity as MainActivity).viewModel.numMax.removeObservers(activity as MainActivity)
+        if (creating && correctExit) (activity as MainActivity).viewModel.numMax.removeObservers(
+            activity as MainActivity
+        )
         else (activity as MainActivity).viewModel.currentEvent.removeObservers(activity as MainActivity)
 
     }
