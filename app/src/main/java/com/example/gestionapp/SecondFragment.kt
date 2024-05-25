@@ -1,6 +1,7 @@
 package com.example.gestionapp
 
 import android.R
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -20,6 +22,8 @@ import com.example.gestionapp.Model.Evento
 import com.example.gestionapp.Model.Utilitties
 import com.example.gestionapp.databinding.FragmentSecondBinding
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -55,6 +59,7 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fechaEvent()
         fillSpinner()
+        binding.switchRango.isChecked = true
 
         id_Evento = arguments?.getInt("id_evento") ?: -1
         if (id_Evento != -1) {
@@ -70,24 +75,29 @@ class SecondFragment : Fragment() {
                 binding.edTxHoraEnd.setText(it.horaEnd)
                 binding.edTxObservations.setText(it.notas)
             }
-            /*val current = (activity as MainActivity).viewModel.searchIDEvent(id_Evento)
-            current?.let {
-
-                binding.spinnerMotivo.setSelection(
-                    (activity as MainActivity).viewModel.indexEnum(current.tipo)
-                )
-                binding.edTxHoraInit.setText(current.horaInit)
-                binding.edTxHoraEnd.setText(current.horaEnd)
-                binding.edTxObservations.setText(current.notas)
-            }*/
         } else {
             binding.btnDelete.text = "Cancelar"
         }
 
+        binding.switchRango.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (isChecked) {
+                binding.edTxHoraEnd.isEnabled = true
+                binding.edTxHoraEnd.visibility = View.VISIBLE
+                binding.txtVwHoraEnd.visibility = View.VISIBLE
+            } else {
+                binding.edTxHoraEnd.isEnabled = false
+                binding.edTxHoraEnd.visibility = View.GONE
+                binding.txtVwHoraEnd.visibility = View.GONE
+
+            }
+        }
 
         binding.btnCR.setOnClickListener {
-            if (creating) SaveEvent()
-            else updateEvent()
+            if (validacionCampos()) {
+                if (creating) SaveEvent()
+                else updateEvent()
+            }
         }
 
         binding.btnDelete.setOnClickListener {
@@ -120,6 +130,63 @@ class SecondFragment : Fragment() {
 
     }
 
+    private fun validacionCampos(): Boolean {
+        var valid = true
+        val regexHoras = Regex("^(?:[01]\\d|2[0-3]):[0-5]\\d$")
+        if (binding.edTxHoraInit.text.isNotEmpty()) {
+            if (binding.switchRango.isChecked) {
+                if (binding.edTxHoraEnd.text.isNotEmpty()) {
+                    if (!regexHoras.matches(binding.edTxHoraEnd.text.toString())) {
+                        Toast.makeText(
+                            (activity as MainActivity), "La hora no coindice con el formato HH:MM",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        if (!validarHoras()) {
+                            Toast.makeText(
+                                (activity as MainActivity),
+                                "La hora de fin es previa a la hora de inicio",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            valid = false
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        (activity as MainActivity), "La hora de fin esta vacia",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    valid = false
+                }
+            } else {
+                if (!regexHoras.matches(binding.edTxHoraInit.text.toString())) {
+                    Toast.makeText(
+                        (activity as MainActivity), "La hora no coindice con el formato HH:MM",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    valid = false
+                }
+            }
+
+        } else {
+            Toast.makeText(
+                (activity as MainActivity), "La hora de Inicio esta vacia",
+                Toast.LENGTH_SHORT
+            ).show()
+            valid = false
+        }
+
+        return valid
+    }
+
+
+    private fun validarHoras(): Boolean {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val hora1 = LocalTime.parse(binding.edTxHoraInit.text.toString(), formatter)
+        val hora2 = LocalTime.parse(binding.edTxHoraEnd.text.toString(), formatter)
+        return hora1.isBefore(hora2)
+    }
+
     private fun deleteEvent() {
 
         try {
@@ -140,17 +207,6 @@ class SecondFragment : Fragment() {
             ).show()
         }
 
-
-        /* if ((activity as MainActivity).viewModel.deleteRegister(id_Evento)) {
-             Toast.makeText(
-                 (activity as MainActivity), "Registro Eliminado Correctamente",
-                 Toast.LENGTH_SHORT
-             ).show()
-             findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
-         } else Toast.makeText(
-             (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
-             Toast.LENGTH_SHORT
-         ).show()*/
     }
 
     private fun updateEvent() {
@@ -158,12 +214,13 @@ class SecondFragment : Fragment() {
             id_Evento,
             selectedEnum(binding.spinnerMotivo.selectedItem.toString()), fecha,
             binding.edTxHoraInit.text.toString(),
-            binding.edTxHoraEnd.text.toString(),
+            if (binding.switchRango.isChecked) binding.edTxHoraEnd.text.toString() else binding.edTxHoraInit.text.toString(),
             binding.edTxObservations.text.toString(), (activity as MainActivity).userInSession()
         )
 
         try {
             (activity as MainActivity).viewModel.updateEvent(current)
+            correctExit = true
             Toast.makeText(
                 (activity as MainActivity), "Registro Actualizado Correctamente",
                 Toast.LENGTH_SHORT
@@ -175,18 +232,6 @@ class SecondFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-
-        /*if ((activity as MainActivity).viewModel.updateRegister(current)) {
-            Toast.makeText(
-                (activity as MainActivity), "Registro Actualizado Correctamente",
-                Toast.LENGTH_SHORT
-            ).show()
-            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
-        } else Toast.makeText(
-            (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
-            Toast.LENGTH_SHORT
-        ).show()*/
-
     }
 
     private fun SaveEvent() {
@@ -195,7 +240,8 @@ class SecondFragment : Fragment() {
         (activity as MainActivity).viewModel.numMax.observe(activity as MainActivity) {
             val tipo = binding.spinnerMotivo.selectedItem.toString()
             val horaI = binding.edTxHoraInit.text.toString()
-            val horaE = binding.edTxHoraEnd.text.toString()
+            val horaE =
+                if (binding.switchRango.isChecked) binding.edTxHoraEnd.text.toString() else horaI
             val notas = binding.edTxObservations.text.toString()
             val eventFecha = fecha
             val current = Evento(
@@ -223,33 +269,8 @@ class SecondFragment : Fragment() {
             }
         }
 
-        /*val tipo = binding.spinnerMotivo.selectedItem.toString()
-        val horaI = binding.edTxHoraInit.text.toString()
-        val horaE = binding.edTxHoraEnd.text.toString()
-        val notas = binding.edTxObservations.text.toString()
-        val eventFecha = fecha
-        val current = (activity as MainActivity).viewModel.addRegister(
-            selectedEnum(tipo),
-            eventFecha,
-            horaI,
-            horaE,
-            notas,
-
-            )
-
-        if (current) {
-            Toast.makeText(
-                (activity as MainActivity), "Registro Guardado Correctamente",
-                Toast.LENGTH_SHORT
-            ).show()
-            findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
-        } else {
-            Toast.makeText(
-                (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
-                Toast.LENGTH_SHORT
-            ).show()
-        }*/
     }
+
 
     private fun fillSpinner() {
         val tipos = listOf(EnumEvent.GENERAL, EnumEvent.GUARDIA, EnumEvent.REPORTE_HORARIO)
@@ -286,7 +307,11 @@ class SecondFragment : Fragment() {
         if (creating && correctExit) (activity as MainActivity).viewModel.numMax.removeObservers(
             activity as MainActivity
         )
-        else (activity as MainActivity).viewModel.currentEvent.removeObservers(activity as MainActivity)
+        else {
+            if (correctExit) {
+                (activity as MainActivity).viewModel.currentEvent.removeObservers(activity as MainActivity)
+            }
+        }
 
     }
 }
