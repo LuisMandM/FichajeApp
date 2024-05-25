@@ -109,7 +109,6 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Hora Inicial"
-                android:fontFamily="@font/antipastoregular"
                 android:textSize="22sp"
                 android:inputType="time" />
 
@@ -136,7 +135,6 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Hora Final"
-                android:fontFamily="@font/antipastoregular"
                 android:textSize="22sp"
                 android:inputType="time" />
 

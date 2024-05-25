@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ltPrincipal"
-    android:layout_width="379dp"
+    android:layout_width="match_parent"
     android:layout_height="86dp"
     android:orientation="vertical"
+    android:background="@drawable/rounded_card"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.487"
@@ -15,18 +16,30 @@
         android:id="@+id/txtVTipo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/antipastoregular"
+        android:textSize="22sp"
         android:text="Tipo" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/lblHoraInit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/rounded_pils_hour"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:fontFamily="@font/antipastoregular"
+            android:textSize="16sp"
             android:text="Hora inicio" />
 
         <TextView
@@ -34,20 +47,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Hora inicio" />
+            android:hint="Hora inicio"
+            android:background="@drawable/rounded_hourfield"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            />
 
         <TextView
             android:id="@+id/lblHoraEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Hora Fin" />
+            android:text="Hora Fin"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_pils_hour"
+            android:fontFamily="@font/antipastoregular"
+            android:textSize="16sp"
+            />
 
         <TextView
             android:id="@+id/txtVwHoraEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Hora fin" />
+            android:hint="Hora fin"
+            android:background="@drawable/rounded_hourfield"
+            android:textAlignment="center"
+            android:textSize="16sp"
+
+            />
     </LinearLayout>
+    <View
+        android:id="@+id/lcBorderBottom"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/inc" />
+
 </LinearLayout>
