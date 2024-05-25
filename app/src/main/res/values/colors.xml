@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="inc">#00A04C</color>
+    <color name="inc_card">#17AE5F</color>
    <!-- <color name="yellow">#fcd303</color>
     <color name="red">#FC0303</color>
     <color name="green">#77FC03</color>-->
