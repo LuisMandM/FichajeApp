@@ -1,7 +1,9 @@
 package com.example.gestionapp.BBDD
 
 import androidx.lifecycle.MutableLiveData
+import com.example.gestionapp.Model.Actividades
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Jornada
 import com.example.gestionapp.Model.Usuario
 
 class Repositorio(val parser: BBDDParse) {
@@ -9,8 +11,24 @@ class Repositorio(val parser: BBDDParse) {
         return parser.mostrarEventos()
     }
 
+    fun mostrarJornadas(): MutableLiveData<List<Jornada>> {
+        return parser.mostrarJornadas()
+    }
+
+    fun mostrarActividades(jornadaID:Int): MutableLiveData<List<Actividades>> {
+        return parser.mostrarActividades(jornadaID)
+    }
+
     fun insertarEvento(current: Evento) {
         parser.insertarEvento(current)
+    }
+
+    fun insertarJornada(current: Jornada) {
+        parser.insertarJornada(current)
+    }
+
+    fun insertarActividad(current: Actividades) {
+        parser.insertarActividad(current)
     }
 
     fun borrarEvento(current: Evento) {
@@ -25,8 +43,19 @@ class Repositorio(val parser: BBDDParse) {
         return parser.buscarIdMaximo()
     }
 
+    fun idMaximoActvidad(): MutableLiveData<Int> {
+        return parser.buscarIdMaximoActvidad()
+    }
+
+    fun idMaximoJornada(): MutableLiveData<Int> {
+        return parser.buscarIdMaximoJornada()
+    }
+
     fun eventById(index: Int): MutableLiveData<Evento> {
         return parser.eventById(index)
+    }
+    fun JornadaById(index: Int): MutableLiveData<Jornada> {
+        return parser.JornadaById(index)
     }
 
     fun getKey(user:String, password:String):MutableLiveData<String>{
