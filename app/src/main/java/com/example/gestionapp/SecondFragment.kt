@@ -17,7 +17,10 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gestionapp.Model.EnumCompanero
 import com.example.gestionapp.Model.EnumEvent
+import com.example.gestionapp.Model.EnumTareas
 import com.example.gestionapp.Model.Evento
 import com.example.gestionapp.Model.Utilitties
 import com.example.gestionapp.databinding.FragmentSecondBinding
@@ -26,6 +29,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
+import com.example.gestionapp.RecycleView.AdapterActividades
 
 
 /**
@@ -40,6 +44,8 @@ class SecondFragment : Fragment() {
     private var correctExit: Boolean = false
     private var obsNum: Boolean = false
     private var obsCurrentE: Boolean = false
+//    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: AdapterActividades
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -59,7 +65,11 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fechaEvent()
         fillSpinner()
-        binding.switchRango.isChecked = true
+        //binding.switchRango.isChecked = true
+
+        adapter = AdapterActividades(EnumTareas.entries.toList())
+        binding.recyclerCheckBox.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerCheckBox.adapter = adapter
 
         id_Evento = arguments?.getInt("id_evento") ?: -1
         if (id_Evento != -1) {
@@ -71,15 +81,15 @@ class SecondFragment : Fragment() {
                 binding.spinnerMotivo.setSelection(
                     Utilitties().indexEnum(it.tipo)
                 )
-                binding.edTxHoraInit.setText(it.horaInit)
-                binding.edTxHoraEnd.setText(it.horaEnd)
-                binding.edTxObservations.setText(it.notas)
+//                binding.edTxHoraInit.setText(it.horaInit)
+//                binding.edTxHoraEnd.setText(it.horaEnd)
+//                binding.edTxObservations.setText(it.notas)
             }
         } else {
             binding.btnDelete.text = "Cancelar"
         }
 
-        binding.switchRango.setOnCheckedChangeListener { buttonView, isChecked ->
+       /* binding.switchRango.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if (isChecked) {
                 binding.edTxHoraEnd.isEnabled = true
@@ -91,13 +101,13 @@ class SecondFragment : Fragment() {
                 binding.txtVwHoraEnd.visibility = View.GONE
 
             }
-        }
+        }*/
 
         binding.btnCR.setOnClickListener {
-            if (validacionCampos()) {
-                if (creating) SaveEvent()
-                else updateEvent()
-            }
+//            if (validacionCampos()) {
+//                if (creating) SaveEvent()
+//                else updateEvent()
+//            }
         }
 
         binding.btnDelete.setOnClickListener {
@@ -117,8 +127,8 @@ class SecondFragment : Fragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     com.example.gestionapp.R.id.itemSave -> {
-                        if (creating) SaveEvent()
-                        else updateEvent()
+//                        if (creating) SaveEvent()
+//                        else updateEvent()
                         true
                     }
 
@@ -130,7 +140,7 @@ class SecondFragment : Fragment() {
 
     }
 
-    private fun validacionCampos(): Boolean {
+/*    private fun validacionCampos(): Boolean {
         var valid = true
         val regexHoras = Regex("^(?:[01]\\d|2[0-3]):[0-5]\\d$")
         if (binding.edTxHoraInit.text.isNotEmpty()) {
@@ -177,15 +187,15 @@ class SecondFragment : Fragment() {
         }
 
         return valid
-    }
+    }*/
 
 
-    private fun validarHoras(): Boolean {
+/*    private fun validarHoras(): Boolean {
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
         val hora1 = LocalTime.parse(binding.edTxHoraInit.text.toString(), formatter)
         val hora2 = LocalTime.parse(binding.edTxHoraEnd.text.toString(), formatter)
         return hora1.isBefore(hora2)
-    }
+    }*/
 
     private fun deleteEvent() {
 
@@ -209,6 +219,7 @@ class SecondFragment : Fragment() {
 
     }
 
+/*
     private fun updateEvent() {
         val current = Evento(
             id_Evento,
@@ -270,12 +281,14 @@ class SecondFragment : Fragment() {
         }
 
     }
+*/
 
 
     private fun fillSpinner() {
-        val tipos = listOf(EnumEvent.GENERAL, EnumEvent.GUARDIA, EnumEvent.REPORTE_HORARIO)
+        //val tipos = listOf(EnumEvent.GENERAL, EnumEvent.GUARDIA, EnumEvent.REPORTE_HORARIO)
+        val enfermeras : Array<EnumCompanero> = enumValues<EnumCompanero>()
         binding.spinnerMotivo.adapter =
-            ArrayAdapter(requireContext(), R.layout.simple_spinner_item, tipos)
+            ArrayAdapter(requireContext(), R.layout.simple_spinner_item, enfermeras)
     }
 
     private fun fechaEvent() {
@@ -292,13 +305,15 @@ class SecondFragment : Fragment() {
         ).show()
     }
 
-    private fun selectedEnum(enumString: String): EnumEvent {
-        when (enumString) {
+    private fun selectedEnum(enumString: String): EnumCompanero {
+        /*when (enumString) {
             EnumEvent.GENERAL.toString() -> return EnumEvent.GENERAL
             EnumEvent.GUARDIA.toString() -> return EnumEvent.GUARDIA
             EnumEvent.REPORTE_HORARIO.toString() -> return EnumEvent.REPORTE_HORARIO
             else -> return EnumEvent.GENERAL
-        }
+        }*/
+
+        return enumValues<EnumCompanero>().find { it.name == enumString } ?: EnumCompanero.Beatriz
     }
 
     override fun onDestroyView() {
