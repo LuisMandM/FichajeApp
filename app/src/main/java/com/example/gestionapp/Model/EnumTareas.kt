@@ -7,6 +7,12 @@ enum class EnumTareas (val texto:String){
     Venopuncion("Venopunción"),
     Toma_Constantes_V("Toma de constantes"),
     Glucometrias("Glucometrias"),
-    Analiticas("Analiticas"),
-    Admin("Tareas Administrativas")
+    Extracciones("Extracciones"),
+    Admin_Medicamentos("Administración"),
+    Transfucion("Transfusión Sanguinea"),
+    Cateterismo_Vesi("Cateterismo Vesical"),
+    Curas("Curas"),
+    Retiro_Sonda("Retiro Sonda"),
+    Retiro_Dre("Retiro de Drenaje"),
+    Otros("Otros")
 }

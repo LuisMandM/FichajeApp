@@ -89,20 +89,6 @@ class SecondFragment : Fragment() {
             binding.btnDelete.text = "Cancelar"
         }
 
-       /* binding.switchRango.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            if (isChecked) {
-                binding.edTxHoraEnd.isEnabled = true
-                binding.edTxHoraEnd.visibility = View.VISIBLE
-                binding.txtVwHoraEnd.visibility = View.VISIBLE
-            } else {
-                binding.edTxHoraEnd.isEnabled = false
-                binding.edTxHoraEnd.visibility = View.GONE
-                binding.txtVwHoraEnd.visibility = View.GONE
-
-            }
-        }*/
-
         binding.btnCR.setOnClickListener {
 //            if (validacionCampos()) {
 //                if (creating) SaveEvent()
@@ -244,8 +230,8 @@ class SecondFragment : Fragment() {
             ).show()
         }
     }
-
-    private fun SaveEvent() {
+*/
+    /*private fun SaveEvent() {
 
         (activity as MainActivity).viewModel.idMax()
         (activity as MainActivity).viewModel.numMax.observe(activity as MainActivity) {
@@ -280,8 +266,8 @@ class SecondFragment : Fragment() {
             }
         }
 
-    }
-*/
+    }*/
+
 
 
     private fun fillSpinner() {
