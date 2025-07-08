@@ -1,7 +1,6 @@
 package com.example.gestionapp
 
 import android.R
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,21 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gestionapp.Model.Actividades
 import com.example.gestionapp.Model.EnumCompanero
-import com.example.gestionapp.Model.EnumEvent
 import com.example.gestionapp.Model.EnumTareas
-import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Jornada
 import com.example.gestionapp.Model.Utilitties
 import com.example.gestionapp.databinding.FragmentSecondBinding
 import java.text.SimpleDateFormat
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import com.example.gestionapp.RecycleView.AdapterActividades
@@ -76,7 +72,7 @@ class SecondFragment : Fragment() {
             creating = false
             binding.btnDelete.isEnabled = true
 
-            (activity as MainActivity).viewModel.searchEvent(id_Evento)
+/*            (activity as MainActivity).viewModel.searchEvent(id_Evento)
             (activity as MainActivity).viewModel.currentEvent.observe(activity as MainActivity) {
                 binding.spinnerMotivo.setSelection(
                     Utilitties().indexEnum(it.tipo)
@@ -84,7 +80,7 @@ class SecondFragment : Fragment() {
 //                binding.edTxHoraInit.setText(it.horaInit)
 //                binding.edTxHoraEnd.setText(it.horaEnd)
 //                binding.edTxObservations.setText(it.notas)
-            }
+            }*/
         } else {
             binding.btnDelete.text = "Cancelar"
         }
@@ -97,8 +93,8 @@ class SecondFragment : Fragment() {
         }
 
         binding.btnDelete.setOnClickListener {
-            if (!creating) deleteEvent()
-            else findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+//            if (!creating) deleteEvent()
+//            else findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
 
         }
 
@@ -115,6 +111,7 @@ class SecondFragment : Fragment() {
                     com.example.gestionapp.R.id.itemSave -> {
 //                        if (creating) SaveEvent()
 //                        else updateEvent()
+                        saveRegister()
                         true
                     }
 
@@ -183,7 +180,7 @@ class SecondFragment : Fragment() {
         return hora1.isBefore(hora2)
     }*/
 
-    private fun deleteEvent() {
+/*    private fun deleteEvent() {
 
         try {
             (activity as MainActivity).viewModel.currentEvent.observe(activity as MainActivity) {
@@ -203,7 +200,7 @@ class SecondFragment : Fragment() {
             ).show()
         }
 
-    }
+    }*/
 
 /*
     private fun updateEvent() {
@@ -231,42 +228,51 @@ class SecondFragment : Fragment() {
         }
     }
 */
-    /*private fun SaveEvent() {
+private fun saveRegister() {
 
-        (activity as MainActivity).viewModel.idMax()
-        (activity as MainActivity).viewModel.numMax.observe(activity as MainActivity) {
-            val tipo = binding.spinnerMotivo.selectedItem.toString()
-            val horaI = binding.edTxHoraInit.text.toString()
-            val horaE =
-                if (binding.switchRango.isChecked) binding.edTxHoraEnd.text.toString() else horaI
-            val notas = binding.edTxObservations.text.toString()
-            val eventFecha = fecha
-            val current = Evento(
-                it + 1, selectedEnum(tipo),
-                eventFecha,
-                horaI,
-                horaE,
-                notas, (activity as MainActivity).userInSession()
-            )
+    (activity as MainActivity).viewModel.idMax()
+    (activity as MainActivity).viewModel.jornadaMax.observe(activity as MainActivity) {
+        val enfermera = binding.spinnerMotivo.selectedItem.toString()
+        val eventFecha = fecha
+        val current = Jornada(
+            it + 1,
+            eventFecha, selectedEnum(enfermera), (activity as MainActivity).userInSession()
+        )
 
-            try {
-                (activity as MainActivity).viewModel.insertEvent(current)
-                correctExit = true
+        try {
+            (activity as MainActivity).viewModel.insertJornada(current)
+            correctExit = true
+
+
+            (activity as MainActivity).viewModel.idActvidadMax()
+            (activity as MainActivity).viewModel.actvidadMax.observe(activity as MainActivity) {
+                val tareas: MutableList<EnumTareas> = adapter.getSeleccionados()
+                var increase = 1
+                for(tarea in tareas){
+                    val currentTask = Actividades(
+                        it + increase, tarea, current
+                    )
+                    (activity as MainActivity).viewModel.insertActividad(currentTask)
+                    increase ++
+                }
+
                 Toast.makeText(
                     (activity as MainActivity), "Registro Guardado Correctamente",
                     Toast.LENGTH_SHORT
                 ).show()
                 findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
-            } catch (e: Exception) {
-                Toast.makeText(
-                    (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
-                    Toast.LENGTH_SHORT
-                ).show()
-                print(e)
             }
-        }
 
-    }*/
+        } catch (e: Exception) {
+            Toast.makeText(
+                (activity as MainActivity), "Algo ha ido mal intenta nuevamente",
+                Toast.LENGTH_SHORT
+            ).show()
+            print(e)
+        }
+    }
+
+}
 
 
 
@@ -292,25 +298,19 @@ class SecondFragment : Fragment() {
     }
 
     private fun selectedEnum(enumString: String): EnumCompanero {
-        /*when (enumString) {
-            EnumEvent.GENERAL.toString() -> return EnumEvent.GENERAL
-            EnumEvent.GUARDIA.toString() -> return EnumEvent.GUARDIA
-            EnumEvent.REPORTE_HORARIO.toString() -> return EnumEvent.REPORTE_HORARIO
-            else -> return EnumEvent.GENERAL
-        }*/
-
         return enumValues<EnumCompanero>().find { it.name == enumString } ?: EnumCompanero.Beatriz
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        if (creating && correctExit) (activity as MainActivity).viewModel.numMax.removeObservers(
-            activity as MainActivity
-        )
+        if (creating && correctExit) {
+            (activity as MainActivity).viewModel.jornadaMax.removeObservers(activity as MainActivity)
+            (activity as MainActivity).viewModel.actvidadMax.removeObservers(activity as MainActivity)
+        }
         else {
             if (correctExit) {
-                (activity as MainActivity).viewModel.currentEvent.removeObservers(activity as MainActivity)
+                (activity as MainActivity).viewModel.currentJornada.removeObservers(activity as MainActivity)
             }
         }
 

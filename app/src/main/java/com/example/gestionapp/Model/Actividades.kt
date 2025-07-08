@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 
 data class Actividades(
     var index: Int,
-    var trabajo: EnumEvent,
-    var jornada: MutableLiveData<Jornada>
+    var trabajo: EnumTareas,
+    var jornada: Jornada
 ) {
 }

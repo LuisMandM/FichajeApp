@@ -6,5 +6,6 @@ import java.util.Calendar
 data class Jornada(
   var index: Int,
   var fecha: Calendar,
+  var companero: EnumCompanero,
   var usuario: Int
 ){}

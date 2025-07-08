@@ -2,6 +2,8 @@ package com.example.gestionapp.BBDD
 
 import androidx.lifecycle.MutableLiveData
 import com.example.gestionapp.Model.Actividades
+import com.example.gestionapp.Model.EnumCompanero
+import com.example.gestionapp.Model.EnumTareas
 import com.example.gestionapp.Model.Evento
 import com.example.gestionapp.Model.Jornada
 import com.example.gestionapp.Model.Role
@@ -47,6 +49,7 @@ class BBDDParse {
                     Jornada(
                         i.getInt("index"),
                         fecha,
+                        EnumCompanero.valueOf(i.getString("companero")?: "Sandra Carracedo"),
                         i.getInt("usuario") ?: 0
                     )
                 }
@@ -62,12 +65,12 @@ class BBDDParse {
         query.findInBackground() { objects, e ->
             if (e == null) {
                 val currentJornada: MutableLiveData<Jornada> = JornadaById(jornadaID)
-
+                val jornada:Jornada? = currentJornada.value
                 val actividad = objects.map { i ->
                     Actividades(
                         i.getInt("index"),
-                        Utilitties().enumValue(i.getInt("Trabajo")),
-                        currentJornada
+                        EnumTareas.valueOf(i.getString("Trabajo")?: "Otros"),
+                        jornada!!
                     )
                 }
                 currentActivities.postValue(actividad)
@@ -97,6 +100,7 @@ class BBDDParse {
         val registro = ParseObject("Jornada")
         registro.put("index", current.index)
         registro.put("fecha", current.fecha.timeInMillis)
+        registro.put("companero",current.companero.texto)
         registro.put("usuario",current.usuario)
         registro.saveInBackground {
             if (it != null) {
@@ -111,8 +115,8 @@ class BBDDParse {
         val registro = ParseObject("RelTrabajosJornada")
         val jornada : MutableLiveData<Jornada> = MutableLiveData()
         registro.put("index", current.index)
-        registro.put("Trabajo", Utilitties().indexEnum(current.trabajo))
-        registro.put("Jornada", current.jornada.value?.index ?: -1)
+        registro.put("Trabajo", current.trabajo.texto)
+        registro.put("Jornada", current.jornada.index)
         registro.saveInBackground {
             if (it != null) {
                 it.localizedMessage?.let { message ->
@@ -199,6 +203,7 @@ class BBDDParse {
                 val jornada = Jornada(
                     i.getInt("index"),
                     fecha,
+                    EnumCompanero.valueOf(i.getString("companero")?: "Sandra Carracedo"),
                     i.getInt("usuario") ?: 0
                 )
                 current.postValue(jornada)

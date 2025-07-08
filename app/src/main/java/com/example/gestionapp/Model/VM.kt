@@ -7,36 +7,74 @@ import androidx.lifecycle.viewModelScope
 import com.example.gestionapp.BBDD.Repositorio
 import kotlinx.coroutines.launch
 
-class VM(private val repositorio: Repositorio) : ViewModel(){
+class VM(private val repositorio: Repositorio) : ViewModel() {
     lateinit var eventos: MutableLiveData<List<Evento>>
+    lateinit var jornadas: MutableLiveData<List<Jornada>>
+    lateinit var actividades: MutableLiveData<List<Actividades>>
+
     //var usuarios: MutableList<Usuario> = mutableListOf()
     //lateinit var currentUser: MutableLiveData<String>
-    lateinit var numMax: MutableLiveData<Int>
-    lateinit var currentEvent: MutableLiveData<Evento>
+//    lateinit var numMax: MutableLiveData<Int>
+//    lateinit var currentEvent: MutableLiveData<Evento>
+
+    lateinit var jornadaMax: MutableLiveData<Int>
+    lateinit var currentJornada: MutableLiveData<Jornada>
+
+    lateinit var actvidadMax: MutableLiveData<Int>
+    lateinit var currentActividades: MutableLiveData<Actividades>
+
+
     lateinit var usuarios: MutableLiveData<List<Usuario>>
 
 
-    fun mostrarEventos()= viewModelScope.launch {
+    fun mostrarEventos() = viewModelScope.launch {
         eventos = repositorio.mostrarEventos()
     }
 
-    fun insertEvent(current:Evento){
+
+    fun mostrarJornadas() = viewModelScope.launch {
+        jornadas = repositorio.mostrarJornadas()
+    }
+
+
+    fun mostrarActividades(current: Int) = viewModelScope.launch {
+        actividades = repositorio.mostrarActividades(current)
+    }
+
+
+
+    fun insertEvent(current: Evento) {
         repositorio.insertarEvento(current)
     }
-    fun deleteEvent(current:Evento){
+
+    fun deleteEvent(current: Evento) {
         repositorio.borrarEvento(current)
     }
-    fun updateEvent(current:Evento){
+
+    fun updateEvent(current: Evento) {
         repositorio.modificarEvento(current)
     }
 
-    fun idMax()= viewModelScope.launch {
-        numMax = repositorio.idMaximo()
+    fun insertJornada(current: Jornada) {
+        repositorio.insertarJornada(current)
     }
 
-    fun searchEvent(index :Int)= viewModelScope.launch {
-        currentEvent = repositorio.eventById(index)
+    fun insertActividad(current: Actividades) {
+        repositorio.insertarActividad(current)
     }
+
+
+    fun idMax() = viewModelScope.launch {
+        jornadaMax = repositorio.idMaximoJornada()
+    }
+
+    fun idActvidadMax() = viewModelScope.launch {
+        actvidadMax = repositorio.idMaximoActvidad()
+    }
+
+/*    fun searchEvent(index: Int) = viewModelScope.launch {
+        currentEvent = repositorio.eventById(index)
+    }*/
 
     /*fun validateUser(user:String, password:String) = viewModelScope.launch {
         currentUser = repositorio.getKey(user,password)
@@ -47,16 +85,16 @@ class VM(private val repositorio: Repositorio) : ViewModel(){
     }
 
 
-   /* fun searchIDEvent(id: Int): Evento? {
-        var found: Evento? = null
-        for (evento in eventos) {
-            if (evento.index == id) {
-                found = evento
-                break
-            }
-        }
-        return found;
-    }*/
+    /* fun searchIDEvent(id: Int): Evento? {
+         var found: Evento? = null
+         for (evento in eventos) {
+             if (evento.index == id) {
+                 found = evento
+                 break
+             }
+         }
+         return found;
+     }*/
 
 
     /*init {
