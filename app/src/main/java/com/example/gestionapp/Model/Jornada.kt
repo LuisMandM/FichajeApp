@@ -7,5 +7,6 @@ data class Jornada(
   var index: Int,
   var fecha: Calendar,
   var companero: EnumCompanero,
-  var usuario: Int
+  var usuario: Int,
+  var actividades: Int = 0
 ){}

@@ -14,5 +14,11 @@ enum class EnumTareas (val texto:String){
     Curas("Curas"),
     Retiro_Sonda("Retiro Sonda"),
     Retiro_Dre("Retiro de Drenaje"),
-    Otros("Otros")
+    Otros("Otros");
+
+    companion object {
+        fun fromText(texto: String):EnumTareas?{
+            return  EnumTareas.entries.find { it.texto == texto}
+        }
+    }
 }

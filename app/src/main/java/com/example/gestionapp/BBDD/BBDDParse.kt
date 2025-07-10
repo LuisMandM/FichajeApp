@@ -47,20 +47,24 @@ class BBDDParse {
                     val fecha = Calendar.getInstance()
                     fecha.timeInMillis = i.getLong("fecha")
                     val companero = EnumCompanero.fromText(i.getString("companero")?: "Desconocido")
-
+//                    val actividadesRel = mostrarActividades(i.getInt("index"))
+//                    val actividades = actividadesRel.value?.size?:0
+                    val actividades = 0
                     if(companero != null){
                         Jornada(
                             i.getInt("index"),
                             fecha,
                             companero,
-                            i.getInt("usuario") ?: 0
+                            i.getInt("usuario") ?: 0,
+                            actividades
                         )
                     }else{
                         Jornada(
                             i.getInt("index"),
                             fecha,
                             EnumCompanero.Desc,
-                            i.getInt("usuario") ?: 0
+                            i.getInt("usuario") ?: 0,
+                            actividades
                         )
                     }
                 }
@@ -78,11 +82,21 @@ class BBDDParse {
                 val currentJornada: MutableLiveData<Jornada> = JornadaById(jornadaID)
                 val jornada:Jornada? = currentJornada.value
                 val actividad = objects.map { i ->
-                    Actividades(
-                        i.getInt("index"),
-                        EnumTareas.valueOf(i.getString("Trabajo")?: "Otros"),
-                        jornada!!
-                    )
+                    val tarea = EnumTareas.fromText(i.getString("Trabajo")?: "Otros")
+
+                    if (tarea != null){
+                        Actividades(
+                            i.getInt("index"),
+                            tarea,
+                            jornada!!
+                        )
+                    }else{
+                        Actividades(
+                            i.getInt("index"),
+                            EnumTareas.Otros,
+                            jornada!!
+                        )
+                    }
                 }
                 currentActivities.postValue(actividad)
             }
@@ -211,12 +225,23 @@ class BBDDParse {
             if (parseException == null) {
                 val fecha = Calendar.getInstance()
                 fecha.timeInMillis = i.getLong("fecha")
-                val jornada = Jornada(
-                    i.getInt("index"),
-                    fecha,
-                    EnumCompanero.valueOf(i.getString("companero")?: "Sandra Carracedo"),
-                    i.getInt("usuario") ?: 0
-                )
+                val companero = EnumCompanero.fromText(i.getString("companero")?: "Desconocido")
+                val jornada: Jornada
+                if (companero != null){
+                    jornada = Jornada(
+                        i.getInt("index"),
+                        fecha,
+                        companero,
+                        i.getInt("usuario") ?: 0
+                    )
+                }else{
+                    jornada = Jornada(
+                        i.getInt("index"),
+                        fecha,
+                        EnumCompanero.Desc,
+                        i.getInt("usuario") ?: 0
+                    )
+                }
                 current.postValue(jornada)
             } else {
                 throw Exception(parseException)

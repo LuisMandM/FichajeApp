@@ -39,7 +39,7 @@ class Adapter(val lista: MutableList<Jornada>) : RecyclerView.Adapter<Adapter.Vi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.txtVTipo.text = "Registro Completado"
         holder.binding.txtVwCompaniero.text = lista[position].companero.texto
-        holder.binding.txtVwTareas.text = "0"
+        holder.binding.txtVwTareas.text = lista[position].actividades.toString()
         holder.id = lista[position].index
         holder.fecha = lista[position].fecha
     }

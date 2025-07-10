@@ -54,7 +54,7 @@
         android:id="@+id/imageView"
         android:layout_width="198dp"
         android:layout_height="267dp"
-        android:src="@drawable/logo_app"
+        android:src="@drawable/nurse"
         app:layout_constraintBottom_toTopOf="@+id/edTxUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.441"
