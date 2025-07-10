@@ -6,12 +6,13 @@ import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Jornada
 import com.example.gestionapp.R
 import com.example.gestionapp.databinding.CardEventRecyclerviewBinding
 import java.util.Calendar
 
 
-class Adapter(val lista: MutableList<Evento>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(val lista: MutableList<Jornada>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     //El ViewHolder es la clase de cada uno de los contenedores
     inner class ViewHolder(val binding: CardEventRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -36,9 +37,9 @@ class Adapter(val lista: MutableList<Evento>) : RecyclerView.Adapter<Adapter.Vie
 
     //cargamos los datos en cada una de las instancias del ViewHolder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.txtVTipo.text = lista[position].tipo.toString()
-        holder.binding.txtVwHoraInit.text = lista[position].horaInit
-        holder.binding.txtVwHoraEnd.text = lista[position].horaEnd
+        holder.binding.txtVTipo.text = "Registro Completado"
+        holder.binding.txtVwCompaniero.text = lista[position].companero.texto
+        holder.binding.txtVwTareas.text = "0"
         holder.id = lista[position].index
         holder.fecha = lista[position].fecha
     }

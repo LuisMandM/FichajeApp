@@ -18,6 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gestionapp.Model.Evento
+import com.example.gestionapp.Model.Jornada
 import com.example.gestionapp.RecycleView.Adapter
 import com.example.gestionapp.databinding.FragmentFirstBinding
 import java.text.SimpleDateFormat
@@ -95,16 +96,16 @@ class FirstFragment : Fragment() {
             Toast.LENGTH_SHORT
         ).show()*/
         //loadEventsperDay()
-        (activity as MainActivity).viewModel.mostrarEventos()
-        (activity as MainActivity).viewModel.eventos.observe(activity as MainActivity){
+        (activity as MainActivity).viewModel.mostrarJornadas()
+        (activity as MainActivity).viewModel.jornadas.observe(activity as MainActivity){
             val datos: SharedPreferences =
                 (activity as MainActivity).getSharedPreferences("user_Data", Context.MODE_PRIVATE)
             val user = datos.getInt("index", 0) ?: 0
-            val currentEvents: MutableList<Evento> = mutableListOf()
-            for (evento in it) {
-                if (formatCalendar(evento.fecha) == formatCalendar(fecha)
-                    && evento.usuario == user) {
-                    currentEvents.add(evento)
+            val currentEvents: MutableList<Jornada> = mutableListOf()
+            for (jornada in it) {
+                if (formatCalendar(jornada.fecha) == formatCalendar(fecha)
+                    && jornada.usuario == user) {
+                    currentEvents.add(jornada)
                 }
             }
             binding.eventRecycler.layoutManager = LinearLayoutManager(activity)
@@ -137,7 +138,7 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        (activity as MainActivity).viewModel.eventos.removeObservers(activity as MainActivity)
+        (activity as MainActivity).viewModel.jornadas.removeObservers(activity as MainActivity)
         //(activity as MainActivity).viewModel.eventos.removeObservers(activity as MainActivity)
     }
 

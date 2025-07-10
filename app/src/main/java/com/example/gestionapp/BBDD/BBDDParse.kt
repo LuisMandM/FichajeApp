@@ -46,12 +46,23 @@ class BBDDParse {
                 val eventos = objects.map { i ->
                     val fecha = Calendar.getInstance()
                     fecha.timeInMillis = i.getLong("fecha")
-                    Jornada(
-                        i.getInt("index"),
-                        fecha,
-                        EnumCompanero.valueOf(i.getString("companero")?: "Sandra Carracedo"),
-                        i.getInt("usuario") ?: 0
-                    )
+                    val companero = EnumCompanero.fromText(i.getString("companero")?: "Desconocido")
+
+                    if(companero != null){
+                        Jornada(
+                            i.getInt("index"),
+                            fecha,
+                            companero,
+                            i.getInt("usuario") ?: 0
+                        )
+                    }else{
+                        Jornada(
+                            i.getInt("index"),
+                            fecha,
+                            EnumCompanero.Desc,
+                            i.getInt("usuario") ?: 0
+                        )
+                    }
                 }
                 currentJornada.postValue(eventos)
             }

@@ -90,6 +90,7 @@ class SecondFragment : Fragment() {
 //                if (creating) SaveEvent()
 //                else updateEvent()
 //            }
+            saveRegister()
         }
 
         binding.btnDelete.setOnClickListener {

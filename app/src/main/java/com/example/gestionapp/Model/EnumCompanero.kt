@@ -6,5 +6,12 @@ enum class EnumCompanero(val texto:String) {
     Beatriz("Beatriz Cherta"),
     Sandra("Sandra Carracedo"),
     Nathaly("Nathaly Bustos"),
-    Monica("Monica ")
+    Monica("Monica "),
+    Desc("Desconocido");
+
+    companion object {
+        fun fromText(texto: String):EnumCompanero?{
+            return  EnumCompanero.entries.find { it.texto == texto}
+        }
+    }
 }
