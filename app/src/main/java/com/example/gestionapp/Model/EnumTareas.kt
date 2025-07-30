@@ -8,12 +8,19 @@ enum class EnumTareas (val texto:String){
     Toma_Constantes_V("Toma de constantes"),
     Glucometrias("Glucometrias"),
     Extracciones("Extracciones"),
-    Admin_Medicamentos("Administración"),
+    Admin_Medicamentos_O("Admon Medicamentos Oral"),
+    Admin_Medicamentos_I("Admon Medicamentos Inyectable"),
     Transfucion("Transfusión Sanguinea"),
     Cateterismo_Vesi("Cateterismo Vesical"),
-    Curas("Curas"),
+    //Curas("Curas"),
     Retiro_Sonda("Retiro Sonda"),
     Retiro_Dre("Retiro de Drenaje"),
+    Identificacion("Identificacion del Paciente"),
+    Higiene_manos("Higiene de Manos"),
+    Extraccion_Art("Extracción Muestra -Arterial"),
+    Hemocultivo("Recogida y procesamiento muestras (Hemocultivo)"),
+    Cura("Cura Heridas"),
+    Valoracion_UPP("Valoración Ulceras por Presión"),
     Otros("Otros");
 
     companion object {
