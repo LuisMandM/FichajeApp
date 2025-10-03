@@ -13,6 +13,7 @@ class AdapterActividades(
 ) : RecyclerView.Adapter<AdapterActividades.ViewHolder>() {
 
     inner class ViewHolder(val checkBox: CheckBox) : RecyclerView.ViewHolder(checkBox)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val checkBox = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_checkbox, parent, false) as CheckBox
@@ -21,12 +22,20 @@ class AdapterActividades(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val opcion = opciones[position]
+
+        // Importante: quitar cualquier listener previo
+        holder.checkBox.setOnCheckedChangeListener(null)
+
+        // Pintar el estado actual
         holder.checkBox.text = opcion.texto
         holder.checkBox.isChecked = seleccionados.contains(opcion)
 
+        // Configurar listener nuevo
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                seleccionados.add(opcion)
+                if (!seleccionados.contains(opcion)) {
+                    seleccionados.add(opcion)
+                }
             } else {
                 seleccionados.remove(opcion)
             }
