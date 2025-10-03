@@ -1,0 +1,48 @@
+package com.example.gestionapp.RecycleView
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.CheckBox
+import androidx.recyclerview.widget.RecyclerView
+import com.example.gestionapp.Model.EnumTareasUrgencias
+import com.example.gestionapp.R
+
+class AdapterActividadesUrgencias(
+    private val opciones: List<EnumTareasUrgencias>,
+    private val seleccionados: MutableList<EnumTareasUrgencias> = mutableListOf()
+) : RecyclerView.Adapter<AdapterActividadesUrgencias.ViewHolder>() {
+
+    inner class ViewHolder(val checkBox: CheckBox) : RecyclerView.ViewHolder(checkBox)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val checkBox = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_checkbox, parent, false) as CheckBox
+        return ViewHolder(checkBox)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val opcion = opciones[position]
+
+        // Importante: quitar cualquier listener previo
+        holder.checkBox.setOnCheckedChangeListener(null)
+
+        // Pintar el estado actual
+        holder.checkBox.text = opcion.texto
+        holder.checkBox.isChecked = seleccionados.contains(opcion)
+
+        // Configurar listener nuevo
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                if (!seleccionados.contains(opcion)) {
+                    seleccionados.add(opcion)
+                }
+            } else {
+                seleccionados.remove(opcion)
+            }
+        }
+    }
+
+    override fun getItemCount(): Int = opciones.size
+
+    fun getSeleccionados(): MutableList<EnumTareasUrgencias> = seleccionados
+}

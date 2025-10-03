@@ -7,7 +7,9 @@ enum class EnumCompanero(val texto:String) {
     Sandra("Sandra Carracedo"),
     Nathaly("Nathaly Bustos"),
     Monica("Monica "),
-    Desc("Desconocido");
+    Desc("Desconocido"),
+    MariaA("Maria Angeles Hernández"),
+    LeireG("Leire González");
 
     companion object {
         fun fromText(texto: String):EnumCompanero?{

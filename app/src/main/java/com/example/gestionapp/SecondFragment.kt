@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gestionapp.Model.Actividades
 import com.example.gestionapp.Model.EnumCompanero
 import com.example.gestionapp.Model.EnumTareas
+import com.example.gestionapp.Model.EnumTareasUrgencias
 import com.example.gestionapp.Model.Jornada
 import com.example.gestionapp.Model.Utilitties
 import com.example.gestionapp.databinding.FragmentSecondBinding
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import com.example.gestionapp.RecycleView.AdapterActividades
+import com.example.gestionapp.RecycleView.AdapterActividadesUrgencias
 
 
 /**
@@ -42,6 +44,7 @@ class SecondFragment : Fragment() {
     private var obsCurrentE: Boolean = false
 //    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdapterActividades
+    private lateinit var adapterUr: AdapterActividadesUrgencias
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -72,32 +75,30 @@ class SecondFragment : Fragment() {
             creating = false
             binding.btnDelete.isEnabled = true
 
-/*            (activity as MainActivity).viewModel.searchEvent(id_Evento)
-            (activity as MainActivity).viewModel.currentEvent.observe(activity as MainActivity) {
-                binding.spinnerMotivo.setSelection(
-                    Utilitties().indexEnum(it.tipo)
-                )
-//                binding.edTxHoraInit.setText(it.horaInit)
-//                binding.edTxHoraEnd.setText(it.horaEnd)
-//                binding.edTxObservations.setText(it.notas)
-            }*/
         } else {
             binding.btnDelete.text = "Cancelar"
         }
 
         binding.btnCR.setOnClickListener {
-//            if (validacionCampos()) {
-//                if (creating) SaveEvent()
-//                else updateEvent()
-//            }
             saveRegister()
         }
 
         binding.btnDelete.setOnClickListener {
-//            if (!creating) deleteEvent()
-//            else findNavController().navigate(com.example.gestionapp.R.id.action_SecondFragment_to_FirstFragment)
+        }
+
+        binding.switchServicio1.setOnCheckedChangeListener{_, isCheked->
+            //binding.recyclerCheckBox.layoutManager = LinearLayoutManager(requireContext())
+            if (!isCheked) {
+                adapter = AdapterActividades(EnumTareas.entries.toList())
+                binding.recyclerCheckBox.adapter = adapter
+
+            }else {
+                adapterUr = AdapterActividadesUrgencias(EnumTareasUrgencias.entries.toList())
+                binding.recyclerCheckBox.adapter = adapterUr
+            }
 
         }
+
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {

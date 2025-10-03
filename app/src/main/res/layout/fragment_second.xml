@@ -66,8 +66,7 @@
             android:id="@+id/spinnerMotivo"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -110,5 +109,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/divider2" />
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingLeft="10dp">
+
+        <Switch
+            android:id="@+id/switchServicio1"
+            android:layout_width="271dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/antipastodemibold"
+            android:layout_weight="1"
+
+            android:text="Urgencias" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
